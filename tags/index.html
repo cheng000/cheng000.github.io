@@ -42,7 +42,7 @@
     
     <title>
         
-            Tags | AMeng000
+            标签 | AMeng000
         
     </title>
     
@@ -205,11 +205,24 @@
 
                             <v-card class="elevation-2 post-card">
     <div class="post-header">
-        <a class="post-header-title font-weight-medium" href="/tags/index.html">Tags</a>
+        <a class="post-header-title font-weight-medium" href="/tags/index.html">标签</a>
     </div>
     <div class="post-content typo">
         
-            
+            <div class="page-describe">
+                counter.tags
+            </div>
+            <div class="tags-contain">
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/%E5%88%9D%E7%BA%A7/">初级</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+            </div>
         
     </div>
 </v-card>
