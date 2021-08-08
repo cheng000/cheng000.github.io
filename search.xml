@@ -4,23 +4,638 @@
   
     
     <entry>
-      <title>Git学习总结</title>
-      <link href="/2021/08/02/git%E5%AD%A6%E4%B9%A0/"/>
-      <url>/2021/08/02/git%E5%AD%A6%E4%B9%A0/</url>
+      <title>MySQL基础</title>
+      <link href="/2021/08/08/MySQL%E5%9F%BA%E7%A1%80/"/>
+      <url>/2021/08/08/MySQL%E5%9F%BA%E7%A1%80/</url>
       
-        <content type="html"><![CDATA[<p><img src="https://raw.githubusercontent.com/cheng000/picture/main/image-20210807205904960.png" alt="image-20210807205904960"></p><h1 id="git学习资料"><a href="#git学习资料" class="headerlink" title="git学习资料"></a>git学习资料</h1><h2 id="学习网站"><a href="#学习网站" class="headerlink" title="学习网站"></a>学习网站</h2><p>之前收集的一个Git 练习网站：<a href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a> </p><h2 id="相关博客"><a href="#相关博客" class="headerlink" title="相关博客"></a>相关博客</h2><h1 id="git学习总结"><a href="#git学习总结" class="headerlink" title="git学习总结"></a>git学习总结</h1><h2 id="git的前世今生"><a href="#git的前世今生" class="headerlink" title="git的前世今生"></a>git的前世今生</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> tab</span><br></pre></td></tr></table></figure><p>​    git的来源是Linux之父，传说是其在开源社区Linux的版本控制工具商撤销合同之后，在两周内完成了现在git的雏形，斯国一~</p><p>​    现在说下版本控制工具的发展：</p><p>​    首先是最开始的本地控制，就相当于现在的项目的版本文档，当然会出现管理混乱的情况（这个是我一直想吐槽的，开发文档管理很乱，开发或测试回头去看可能自己都不知道自己修改了啥）。</p><p>​    随后出现了SVN（集中管理），其有中心服务器可以统一管理所有版本，但是万一哪天中心服务器挂了，computerA和computerB之间就没法进行版本交互了，因为其本地不存在版本历史记录。</p><p>​    最后出现了git（分布式管理），不光在远程仓库保存了所有历史记录，而且在computerA和computerB的本地也保存了历史记录，就不存在版本无法交互的情况，而且本地也可以查看历史版本记录。</p><p>​    </p><p>​    </p><p>​    </p>]]></content>
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
       
       
       <categories>
           
-          <category> git </category>
+          <category> 数据库 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 初级 </tag>
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>oracle基础</title>
+      <link href="/2021/08/08/oracle%E5%9F%BA%E7%A1%80/"/>
+      <url>/2021/08/08/oracle%E5%9F%BA%E7%A1%80/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Oracle </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>注解</title>
+      <link href="/2021/08/08/%E6%B3%A8%E8%A7%A3/"/>
+      <url>/2021/08/08/%E6%B3%A8%E8%A7%A3/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java高级 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 注解 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>反射</title>
+      <link href="/2021/08/08/%E5%8F%8D%E5%B0%84/"/>
+      <url>/2021/08/08/%E5%8F%8D%E5%B0%84/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java高级 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 反射 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>并发</title>
+      <link href="/2021/08/08/%E5%B9%B6%E5%8F%91/"/>
+      <url>/2021/08/08/%E5%B9%B6%E5%8F%91/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java中级 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 并发 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>lambda</title>
+      <link href="/2021/08/08/lambda/"/>
+      <url>/2021/08/08/lambda/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java中级 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> lambda </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>泛型</title>
+      <link href="/2021/08/08/%E6%B3%9B%E5%9E%8B/"/>
+      <url>/2021/08/08/%E6%B3%9B%E5%9E%8B/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java中级 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 泛型 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>集合框架</title>
+      <link href="/2021/08/08/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/"/>
+      <url>/2021/08/08/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java中级 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 集合框架 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>I/O</title>
+      <link href="/2021/08/08/I-O/"/>
+      <url>/2021/08/08/I-O/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java中级 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> I/O </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>异常处理</title>
+      <link href="/2021/08/08/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"/>
+      <url>/2021/08/08/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java中级 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 异常处理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>日期</title>
+      <link href="/2021/08/08/%E6%97%A5%E6%9C%9F/"/>
+      <url>/2021/08/08/%E6%97%A5%E6%9C%9F/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java基础 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 日期 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>数字与字符串</title>
+      <link href="/2021/08/08/%E6%95%B0%E5%AD%97%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+      <url>/2021/08/08/%E6%95%B0%E5%AD%97%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java基础 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 数字 </tag>
+            
+            <tag> 字符串 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>接口与继承</title>
+      <link href="/2021/08/08/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E7%BB%A7%E6%89%BF/"/>
+      <url>/2021/08/08/%E6%8E%A5%E5%8F%A3%E4%B8%8E%E7%BB%A7%E6%89%BF/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java基础 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 接口与继承 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SpringBoot</title>
+      <link href="/2021/08/08/SpringBoot/"/>
+      <url>/2021/08/08/SpringBoot/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java框架 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SpringBoot </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MVC</title>
+      <link href="/2021/08/08/MVC/"/>
+      <url>/2021/08/08/MVC/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java框架 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MVC </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mybatis</title>
+      <link href="/2021/08/08/Mybatis/"/>
+      <url>/2021/08/08/Mybatis/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java框架 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Mybatis </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>spring</title>
+      <link href="/2021/08/08/spring/"/>
+      <url>/2021/08/08/spring/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> java框架 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> spring </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>jsoup</title>
+      <link href="/2021/08/08/jsoup/"/>
+      <url>/2021/08/08/jsoup/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> jsoup </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>log4j2</title>
+      <link href="/2021/08/08/log4j2/"/>
+      <url>/2021/08/08/log4j2/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具和中间件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> log4j2 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>消息中间件</title>
+      <link href="/2021/08/07/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+      <url>/2021/08/07/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具和中间件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 消息中间件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>docker</title>
+      <link href="/2021/08/07/docker/"/>
+      <url>/2021/08/07/docker/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具和中间件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>shiro</title>
+      <link href="/2021/08/07/shiro/"/>
+      <url>/2021/08/07/shiro/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具和中间件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> shiro </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>nginx</title>
+      <link href="/2021/08/07/nginx/"/>
+      <url>/2021/08/07/nginx/</url>
+      
+        <content type="html"><![CDATA[<span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具和中间件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> nginx </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>redis</title>
+      <link href="/2021/08/07/redis/"/>
+      <url>/2021/08/07/redis/</url>
+      
+        <content type="html"><![CDATA[<h1 id="what’s-redis"><a href="#what’s-redis" class="headerlink" title="what’s redis"></a>what’s redis</h1><span id="more"></span>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具和中间件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> redis </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>maven</title>
+      <link href="/2021/08/07/maven/"/>
+      <url>/2021/08/07/maven/</url>
+      
+        <content type="html"><![CDATA[<h1 id="what’s-maven"><a href="#what’s-maven" class="headerlink" title="what’s maven?"></a>what’s maven?</h1><blockquote><p>Maven 是专门用于构建和管理Java相关项目的工具。</p><p>Maven是意第绪语，依地语（犹太人使用的国际语），表示专家的意思。</p></blockquote><span id="more"></span>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> maven </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Git学习总结</title>
+      <link href="/2021/08/02/git/"/>
+      <url>/2021/08/02/git/</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://raw.githubusercontent.com/cheng000/picture/main/image-20210807205904960.png" alt="image-20210807205904960"></p><span id="more"></span><h1 id="git学习资料"><a href="#git学习资料" class="headerlink" title="git学习资料"></a>git学习资料</h1><h2 id="学习网站"><a href="#学习网站" class="headerlink" title="学习网站"></a>学习网站</h2><p>之前收集的一个Git 练习网站：<a href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a> </p><h2 id="相关博客"><a href="#相关博客" class="headerlink" title="相关博客"></a>相关博客</h2><h1 id="git学习总结"><a href="#git学习总结" class="headerlink" title="git学习总结"></a>git学习总结</h1><h2 id="git的前世今生"><a href="#git的前世今生" class="headerlink" title="git的前世今生"></a>git的前世今生</h2><p>​    git的来源是Linux之父，传说是其在开源社区Linux的版本控制工具商撤销合同之后，在两周内完成了现在git的雏形，斯国一~</p><p>​    现在说下版本控制工具的发展：</p><p>​    首先是最开始的本地控制，就相当于现在的项目的版本文档，当然会出现管理混乱的情况（这个是我一直想吐槽的，开发文档管理很乱，开发或测试回头去看可能自己都不知道自己修改了啥）。</p><p>​    随后出现了SVN（集中管理），其有中心服务器可以统一管理所有版本，但是万一哪天中心服务器挂了，computerA和computerB之间就没法进行版本交互了，因为其本地不存在版本历史记录。</p><p>​    最后出现了git（分布式管理），不光在远程仓库保存了所有历史记录，而且在computerA和computerB的本地也保存了历史记录，就不存在版本无法交互的情况，而且本地也可以查看历史版本记录。</p><h2 id="git常用命令"><a href="#git常用命令" class="headerlink" title="git常用命令"></a>git常用命令</h2><p>初始化：</p><ol><li>git init：初始化git</li><li>echo  “init” &gt;&gt; READMEN.md</li><li>git add README.md</li><li>git commit -m “init”</li><li>git add remote origin <a href="mailto:&#103;&#105;&#x74;&#64;&#120;&#120;&#x78;&#46;&#x67;&#105;&#x74;">&#103;&#105;&#x74;&#64;&#120;&#120;&#x78;&#46;&#x67;&#105;&#x74;</a></li><li>git push -u origin master</li></ol><p>过程中：</p><ol><li>git stash</li><li>git pull –rebase</li><li>git stash pop</li><li>git push</li></ol><p>分支：</p><ol><li>git status</li><li>git checkout xx</li><li>git checkout -b newbranch</li></ol><p>​    </p><p>​    </p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具和中间件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> git </tag>
             
         </tags>
       
