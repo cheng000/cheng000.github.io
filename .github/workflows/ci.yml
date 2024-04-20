@@ -32,6 +32,9 @@ jobs:
       - name: Build VitePress
         run: npm run docs:build # 这里是打包 vitepress 命令
 
+      - name: genarate CNAME file
+        run: echo 'www.blazing3.com' > docs/.vitepress/dist/CNAME  # 改成你要绑定的域名
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -40,17 +43,4 @@ jobs:
           publish_branch: deploy-pages # 推送到关联仓库的 gh-pages 分支
           dotfiles: true  # 包括在提交中，即使被 .gitignore 文件忽略
 
-  
-  move_cname:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
-      - name: Move CNAME to deploy branch
-        run: |
-          git checkout deploy-pages
-          mv CNAME .
-          git add CNAME
-          git commit -m "Move CNAME to deploy-pages branch" || echo "No changes to commit"
-          git push origin deploy-pages
