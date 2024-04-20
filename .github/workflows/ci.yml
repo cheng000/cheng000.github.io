@@ -1,8 +1,12 @@
 name: pages-build-site
-on: 
-  push:  // 有代码push或者merge到main分支时，才进行下面的操作
+
+on:
+  # 手动运行工作流程（workflow_dispatch 事件触发器配置后可以在actions下手动运行工作流）
+  workflow_dispatch:
+  push:
     branches: 
-      - main
+      - master
+    
 jobs:
   deploy:
     runs-on: ubuntu-latest 
