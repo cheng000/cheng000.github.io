@@ -39,3 +39,18 @@ jobs:
           publish_dir: docs/.vitepress/dist # 指定该文件夹中的 dist 
           publish_branch: deploy-pages # 推送到关联仓库的 gh-pages 分支
           dotfiles: true  # 包括在提交中，即使被 .gitignore 文件忽略
+
+  
+  move_cname:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Move CNAME to deploy branch
+        run: |
+          git checkout deploy-pages
+          mv CNAME .
+          git add CNAME
+          git commit -m "Move CNAME to deploy-pages branch" || echo "No changes to commit"
+          git push origin deploy-pages
