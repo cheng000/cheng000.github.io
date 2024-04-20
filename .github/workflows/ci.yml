@@ -33,7 +33,7 @@ jobs:
         run: npm run docs:build # 这里是打包 vitepress 命令
 
       - name: genarate CNAME file
-        run: echo 'www.blazing3.com' > docs/.vitepress/dist/CNAME  # 改成你要绑定的域名
+        run: echo 'www.blazing3.com' > docs/.vitepress/dist/CNAME  # 避免发布到deploy-pages分支后CNAME不见了，导致无法通过域名访问
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
