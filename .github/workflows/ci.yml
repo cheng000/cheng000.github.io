@@ -26,6 +26,9 @@ jobs:
       # - name: Install dependencies
       #   run: pnpm install # 使用 pnpm 安装依赖
 
+      - name: Install vitepress
+        run: npm add -D vitepress
+
       - name: Build VitePress
         run: npm run docs:build # 这里是打包 vitepress 命令
 
