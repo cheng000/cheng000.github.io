@@ -4,7 +4,7 @@
 
 ### 1.1 基本类型
 
-Java语言支持以下基本类型：
+Java语言支持以下基本类型1111111111111：
 
 - 整数类型：byte、short、int、long
 - 浮点类型：float、double   
