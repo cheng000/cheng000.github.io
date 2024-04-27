@@ -4,6 +4,8 @@
 
 ## 1. 变量
 
+![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427191931.png)
+
 # aaaa
 
 ## 2. 基本类型

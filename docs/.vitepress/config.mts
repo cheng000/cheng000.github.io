@@ -9,7 +9,7 @@ export default defineConfig({
   // 对 markdown 的配置
   markdown:{
     toc: {
-      level: [1,2,3,4], // 指定标题的层级
+      level: [1,2,3,4,5], // 指定标题的层级
     }
   },
   vite: {
