@@ -29,6 +29,10 @@ jobs:
       - name: Install vitepress
         run: npm add -D vitepress
 
+      # 安装主题插件
+      - name: Install vitepress-plugin-comment-with-giscus
+        run: npm install vitepress-plugin-comment-with-giscus
+
       - name: Build VitePress
         run: npm run docs:build # 这里是打包 vitepress 命令
 
