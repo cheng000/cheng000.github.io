@@ -43,6 +43,11 @@ jobs:
       - name: Install medium-zoom
         run: npm install medium-zoom
 
+      # 时间线插件：vitepress-markdown-timeline
+      - name: Install vitepress-markdown-timeline
+        run: npm install vitepress-markdown-timeline
+
+
        # ==================== 安装主题插件 end ==================== #
 
       - name: Build VitePress
