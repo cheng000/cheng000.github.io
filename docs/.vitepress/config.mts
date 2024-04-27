@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import AutoSidebar from 'vite-plugin-vitepress-auto-sidebar';
+import timeline from "vitepress-markdown-timeline"; 
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -10,7 +11,14 @@ export default defineConfig({
   markdown:{
     toc: {
       level: [1,2,3,4,5], // 指定标题的层级
-    }
+    },
+    //行号显示
+    lineNumbers: true, 
+
+    //时间线
+    config: (md) => {
+      md.use(timeline);
+    },
   },
   vite: {
     plugins: [
