@@ -12,6 +12,15 @@
 ::: timeline 2023-04-23
 :::
 
+
+:::tabs
+== tab a
+a content
+== tab b
+b content
+:::
+
+
 ## 1. 变量
 
 ![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427191931.png)

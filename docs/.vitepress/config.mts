@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import AutoSidebar from 'vite-plugin-vitepress-auto-sidebar';
 import timeline from "vitepress-markdown-timeline"; 
+import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -18,6 +19,7 @@ export default defineConfig({
     //时间线
     config: (md) => {
       md.use(timeline);
+      md.use(tabsMarkdownPlugin);
     },
   },
   vite: {
@@ -25,6 +27,7 @@ export default defineConfig({
       AutoSidebar(),
     ],
   },
+
   themeConfig: {
     logo: '/cool.png',
     // https://vitepress.dev/reference/default-theme-config
@@ -57,6 +60,9 @@ export default defineConfig({
     },
 
     lastUpdatedText: "最后更新", // string
-  }
+  },
+
+  
   
 })
+

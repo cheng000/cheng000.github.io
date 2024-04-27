@@ -12,6 +12,11 @@ import { onMounted, watch, nextTick } from 'vue';
 // 只需添加以下一行代码，引入时间线样式
 import "vitepress-markdown-timeline/dist/theme/index.css";
 
+import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
+
+import vitepressBackToTop from 'vitepress-plugin-back-to-top'
+import 'vitepress-plugin-back-to-top/dist/style.css'
+
 
 export default {
   extends: DefaultTheme,
@@ -23,6 +28,11 @@ export default {
         busuanzi.fetch()
       }
     }
+    enhanceAppWithTabs(app),
+    vitepressBackToTop({
+        // default
+        threshold:300
+    })
   },
 
   setup() {
