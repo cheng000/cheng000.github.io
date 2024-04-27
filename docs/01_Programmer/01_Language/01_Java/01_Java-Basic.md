@@ -2,9 +2,7 @@
 
 ## 1. 变量
 
-![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427180029.png?token=AFTKOZSOSLEYUKQG2TH3GFLGFTGPY)
-
-![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427181214.png)
+## 2. 基本类型
 
 ### 1.1 基本类型
 
