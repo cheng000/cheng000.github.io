@@ -6,6 +6,12 @@ export default defineConfig({
   title: "开发者",
   description: "blog",
   lastUpdated: true,
+  // 对 markdown 的配置
+  markdown:{
+    toc: {
+      level: [1,2,3,4], // 指定标题的层级
+    }
+  },
   vite: {
     plugins: [
       AutoSidebar(),

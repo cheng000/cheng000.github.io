@@ -1,5 +1,7 @@
 # 01_Java-Basic
 
+[[toc]]
+
 ## 1. 变量
 
 # aaaa
