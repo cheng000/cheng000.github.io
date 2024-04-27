@@ -51,6 +51,10 @@ jobs:
       - name: Install vitepress-plugin-tabs
         run: npm install vitepress-plugin-tabs
 
+      # 返回top插件：vitepress-plugin-back-to-top
+      - name: Install vitepress-plugin-back-to-top
+        run: npm i vitepress-plugin-back-to-top
+
 
 
        # ==================== 安装主题插件 end ==================== #
