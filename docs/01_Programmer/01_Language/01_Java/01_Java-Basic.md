@@ -2,7 +2,7 @@
 
 ## 1. 变量
 
-![](./public/imgs/01_Java-Basic#20240427172144.png)
+![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427180029.png?token=AFTKOZSOSLEYUKQG2TH3GFLGFTGPY)
 
 ### 1.1 基本类型
 
