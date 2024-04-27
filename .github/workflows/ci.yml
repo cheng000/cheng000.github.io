@@ -29,9 +29,21 @@ jobs:
       - name: Install vitepress
         run: npm add -D vitepress
 
-      # 安装主题插件
+      # ==================== 安装主题插件 start ==================== #
+
+      # 评论插件：vitepress-plugin-comment-with-giscus
       - name: Install vitepress-plugin-comment-with-giscus
         run: npm install vitepress-plugin-comment-with-giscus
+
+      # 访问量插件，卜算子：busuanzi.pure.js
+      - name: Install busuanzi.pure.js
+        run: npm install busuanzi.pure.js
+
+      # 图片缩放插件：medium-zoom
+      - name: Install medium-zoom
+        run: npm install medium-zoom
+
+       # ==================== 安装主题插件 end ==================== #
 
       - name: Build VitePress
         run: npm run docs:build # 这里是打包 vitepress 命令
