@@ -4,9 +4,11 @@
 
 ![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427180029.png?token=AFTKOZSOSLEYUKQG2TH3GFLGFTGPY)
 
+![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427181214.png)
+
 ### 1.1 基本类型
 
-Java语言支持以下基本类型1111111111111：
+Java语言支持以下基本类型：
 
 - 整数类型：byte、short、int、long
 - 浮点类型：float、double   
