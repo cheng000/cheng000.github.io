@@ -47,6 +47,11 @@ jobs:
       - name: Install vitepress-markdown-timeline
         run: npm install vitepress-markdown-timeline
 
+      # tab插件：vitepress-plugin-tabs
+      - name: Install vitepress-plugin-tabs
+        run: npm install vitepress-plugin-tabs
+
+
 
        # ==================== 安装主题插件 end ==================== #
 
