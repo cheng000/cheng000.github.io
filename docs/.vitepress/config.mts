@@ -2,14 +2,20 @@ import { defineConfig } from 'vitepress'
 import AutoSidebar from 'vite-plugin-vitepress-auto-sidebar';
 import timeline from "vitepress-markdown-timeline"; 
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
+import { withMagicMove } from 'vitepress-plugin-magic-move'
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMagicMove(defineConfig({
   title: "开发者",
   description: "blog",
   lastUpdated: true,
   // 对 markdown 的配置
   markdown:{
+    theme: {
+      light: 'vitesse-light',
+      dark: 'vitesse-dark',
+    },
+    
     toc: {
       level: [1,2,3,4,5], // 指定标题的层级
     },
@@ -61,8 +67,6 @@ export default defineConfig({
 
     lastUpdatedText: "最后更新", // string
   },
-
   
-  
-})
+}))
 

@@ -17,6 +17,8 @@ import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import vitepressBackToTop from 'vitepress-plugin-back-to-top'
 import 'vitepress-plugin-back-to-top/dist/style.css'
 
+import 'shiki-magic-move/style.css'
+
 
 export default {
   extends: DefaultTheme,

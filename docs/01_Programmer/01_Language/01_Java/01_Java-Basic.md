@@ -21,6 +21,19 @@ b content
 :::
 
 
+
+:::magic-move 
+```java [test1.java]
+name = "test2"
+system.out.putline("test1");
+```
+```java [test2.java]
+system.out.putline("test2");
+```
+:::
+
+
+
 ## 1. 变量
 
 ![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427191931.png)
