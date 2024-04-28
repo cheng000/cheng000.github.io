@@ -55,7 +55,9 @@ jobs:
       - name: Install vitepress-plugin-back-to-top
         run: npm i vitepress-plugin-back-to-top
 
-
+      # 动画演示插件：vitepress-plugin-magic-move、shiki-magic-move
+      - name: Install vitepress-plugin-magic-move shiki-magic-move
+        run: npm i vitepress-plugin-magic-move shiki-magic-move
 
        # ==================== 安装主题插件 end ==================== #
 
