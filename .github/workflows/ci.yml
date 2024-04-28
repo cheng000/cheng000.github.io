@@ -59,6 +59,12 @@ jobs:
       - name: Install vitepress-plugin-magic-move shiki-magic-move
         run: npm i vitepress-plugin-magic-move shiki-magic-move
 
+      # 复制辅助插件：vitepress-copy-helper
+      - name: Install vitepress-copy-helper
+        run: npm i vitepress-copy-helper
+
+      
+
        # ==================== 安装主题插件 end ==================== #
 
       - name: Build VitePress
