@@ -3,16 +3,16 @@
 layout: home
 
 hero:
-  name: "blazing3"
+  name: "开发者"
   text: "blog"
-  tagline: My great project tagline
+  tagline: "There are infinite paths and infinite possibilities, but you must open the door."
   actions:
     - theme: brand
       text: Markdown Examples
       link: /markdown-examples
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Test Examples
+      link: /test-examples
 
 features:
   - title: Feature AAAAAA
