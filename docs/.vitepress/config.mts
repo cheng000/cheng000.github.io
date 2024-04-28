@@ -3,9 +3,10 @@ import AutoSidebar from 'vite-plugin-vitepress-auto-sidebar';
 import timeline from "vitepress-markdown-timeline"; 
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 import { withMagicMove } from 'vitepress-plugin-magic-move'
+import { withPwa } from '@vite-pwa/vitepress'
 
 // https://vitepress.dev/reference/site-config
-export default withMagicMove(defineConfig({
+export default withPwa(withMagicMove(defineConfig({
   title: "开发者",
   description: "blog",
   lastUpdated: true,
@@ -15,7 +16,7 @@ export default withMagicMove(defineConfig({
       light: 'vitesse-light',
       dark: 'vitesse-dark',
     },
-    
+
     toc: {
       level: [1,2,3,4,5], // 指定标题的层级
     },
@@ -33,6 +34,7 @@ export default withMagicMove(defineConfig({
       AutoSidebar(),
     ],
   },
+
 
   themeConfig: {
     logo: '/cool.png',
@@ -68,5 +70,8 @@ export default withMagicMove(defineConfig({
     lastUpdatedText: "最后更新", // string
   },
   
-}))
+   /* Vite PWA Options */
+   pwa: {}
+
+})))
 

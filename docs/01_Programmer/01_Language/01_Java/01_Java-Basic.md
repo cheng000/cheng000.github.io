@@ -32,6 +32,7 @@ system.out.putline("test2");
 ```
 :::
 
+`button at the end`<C/>
 
 
 ## 1. 变量

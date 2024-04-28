@@ -19,6 +19,8 @@ import 'vitepress-plugin-back-to-top/dist/style.css'
 
 import 'shiki-magic-move/style.css'
 
+import CopyButton from 'vitepress-copy-helper';
+import 'vitepress-copy-helper/style.css'
 
 export default {
   extends: DefaultTheme,
@@ -34,7 +36,10 @@ export default {
     vitepressBackToTop({
         // default
         threshold:300
-    })
+    }),
+
+    app.component('C', CopyButton);
+
   },
 
   setup() {
