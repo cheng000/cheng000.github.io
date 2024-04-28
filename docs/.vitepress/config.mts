@@ -3,10 +3,9 @@ import AutoSidebar from 'vite-plugin-vitepress-auto-sidebar';
 import timeline from "vitepress-markdown-timeline"; 
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 import { withMagicMove } from 'vitepress-plugin-magic-move'
-import { withPwa } from '@vite-pwa/vitepress'
 
 // https://vitepress.dev/reference/site-config
-export default withPwa(withMagicMove(defineConfig({
+export default withMagicMove(defineConfig({
   title: "开发者",
   description: "blog",
   lastUpdated: true,
@@ -70,8 +69,7 @@ export default withPwa(withMagicMove(defineConfig({
     lastUpdatedText: "最后更新", // string
   },
   
-   /* Vite PWA Options */
-   pwa: {}
+   
 
-})))
+}))
 
