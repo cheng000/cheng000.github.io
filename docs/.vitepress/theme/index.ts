@@ -22,6 +22,9 @@ import 'shiki-magic-move/style.css'
 import CopyButton from 'vitepress-copy-helper';
 import 'vitepress-copy-helper/style.css'
 
+// 引入自定义的加密内容组件
+import EncryptedContent from '../components/encrypt/EncryptedContent.vue'
+
 export default {
   extends: DefaultTheme,
 
@@ -39,6 +42,7 @@ export default {
     }),
 
     app.component('C', CopyButton);
+    app.component('EncryptedContent', EncryptedContent);
 
   },
 

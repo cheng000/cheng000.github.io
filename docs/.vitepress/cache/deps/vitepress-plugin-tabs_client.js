@@ -2,7 +2,7 @@ import {
   reactive,
   watch
 } from "./chunk-O4XWQMLZ.js";
-import "./chunk-Y2F7D3TJ.js";
+import "./chunk-TDUMLE5V.js";
 
 // ../../../../../node_modules/vitepress-plugin-tabs/src/client/index.ts
 import PluginTabs from "/Users/mikec/node_modules/vitepress-plugin-tabs/src/client/PluginTabs.vue";

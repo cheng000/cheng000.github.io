@@ -1,4 +1,4 @@
-import "./chunk-Y2F7D3TJ.js";
+import "./chunk-TDUMLE5V.js";
 
 // ../../../../../node_modules/@giscus/vue/dist/giscus-aTimukGI.mjs
 var H = globalThis;
@@ -1018,4 +1018,4 @@ export {
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 */
-//# sourceMappingURL=giscus-aTimukGI-F7MJ3G4Z.js.map
+//# sourceMappingURL=giscus-aTimukGI-7PLH55TL.js.map

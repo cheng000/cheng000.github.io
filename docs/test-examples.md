@@ -4,6 +4,10 @@ outline: deep
 
 # Test Examples
 
+<EncryptedContent>
+test
+</EncryptedContent>
+
 > 该页面是测试页面，用于展示一些vitepress的用法、插件使用方式等。
 
 ::: timeline 2023-04-24
