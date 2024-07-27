@@ -2,7 +2,82 @@
 
 [[toc]]
 
+```ts{4-5}
+export default defineConfig({
+  lang: 'zh-CN', 
+  title: "VitePress", 
+  description: "我的vitpress文档教程", // [!code  --]
+  description: "更详细的vitpress中文文档教程", // [!code  ++]
+  titleTemplate: '另起标题覆盖title' ,
+})
+```
 
+<details>
+  <summary>点我展开</summary>
+  Markdown默认折叠语法，Vitepress可以使用容器折叠语法，更加美观
+</details>
+
+::: info
+这是一条信息，info后面的文字可修改
+:::
+
+::: tip 说明
+这是一个提示，tip后面的文字可修改
+:::
+
+::: warning 警告
+这是一条警告，warning后面的文字可修改
+:::
+
+::: danger 危险
+这是一个危险警告，danger后面的文字可修改
+:::
+
+::: details 点我查看
+这是一条详情，details后面的文字可修改
+:::
+
+```ts{2-3,5}
+export default defineConfig({
+  lang: 'zh-CN',
+  title: "VitePress",
+  description: "我的vitpress文档教程",
+  titleTemplate: '另起标题覆盖title' ,
+})
+```
+
+```ts{4}
+export default defineConfig({
+  lang: 'zh-CN',
+  title: "VitePress",
+  description: "我的vitpress文档教程", // [!code  focus]
+  titleTemplate: '另起标题覆盖title' ,
+})
+```
+
+```ts{4-5}
+export default defineConfig({
+  lang: 'zh-CN', 
+  title: "VitePress", 
+  description: "我的vitpress文档教程", // [!code  error]
+  description: "更详细的vitpress中文文档教程", // [!code  warning]
+  titleTemplate: '另起标题覆盖title' ,
+})
+```
+
+::: code-group
+
+```sh [pnpm]
+#查询pnpm版本
+pnpm -v
+```
+
+```sh [yarn]
+#查询yarn版本
+yarn -v
+```
+
+:::
 
 
 ## 1. 变量
@@ -14,6 +89,8 @@
 ## 2. 基本类型
 
 ### 1.1 基本类型
+
+#### 1.1.1.1 test
 
 Java语言支持以下基本类型：
 

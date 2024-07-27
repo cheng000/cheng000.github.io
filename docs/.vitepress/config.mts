@@ -27,6 +27,11 @@ export default withMagicMove(defineConfig({
       md.use(timeline);
       md.use(tabsMarkdownPlugin);
     },
+
+    image: {
+      // 开启图片懒加载
+      lazyLoading: true
+    },
   },
   vite: {
     plugins: [
@@ -67,6 +72,12 @@ export default withMagicMove(defineConfig({
     },
 
     lastUpdatedText: "最后更新", // string
+
+    outline: { 
+      // level: [2,4], // 显示2-4级标题
+      level: 'deep', // 显示2-6级标题
+      label: '当前页大纲' // 文字显示
+    },
   },
   
    

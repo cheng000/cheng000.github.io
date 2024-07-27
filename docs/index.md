@@ -21,6 +21,11 @@ features:
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
   - title: Feature C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+
+
+outline: [2]
+aside: false
+
 ---
 
 本站总访问量 <span id="busuanzi_value_site_pv" /> 次  
