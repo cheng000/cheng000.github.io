@@ -63,7 +63,9 @@ jobs:
       - name: Install vitepress-copy-helper
         run: npm i vitepress-copy-helper
 
-      
+      # 加密库：bcryptjs
+      - name: Install bcryptjs
+        run: npm i bcryptjs
 
        # ==================== 安装主题插件 end ==================== #
 
