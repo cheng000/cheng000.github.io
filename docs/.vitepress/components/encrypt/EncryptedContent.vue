@@ -30,7 +30,7 @@ export default {
       password: '',
       unlocked: false,
       error: false,
-      storedHash: '$2a$10$oPnpz6ySciaatO9xxf2IAuYOzQewGmM0A.6kxlpzTzETDUhxUtLr.', // 将生成的哈希值放在这里
+      storedHash: '$2a$10$Il/eHO7c8qXNs/NT4qDCre1lxnFJTMJH.Gibzzw8OiA5eoYYKMWni', // 将生成的哈希值放在这里
     };
   },
   methods: {

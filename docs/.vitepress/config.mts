@@ -49,6 +49,8 @@ export default withMagicMove(defineConfig({
       { text: 'Architecture', link: '/02_Architecture/01_Architecture-Basic/01_架构知识体系' },
       { text: 'Tools', link: '/03_Tools/01_Development-Tools/01_Development-List' },
       { text: 'Projects', link: '/04_Projects/01_Learn-Project/01_项目基础' },
+      { text: 'DevSummary', link: '/05_DevSummary/01_Work/001_人机密码分离' },
+      { text: 'Cabin&Backpack', link: '/06_Cabin&Backpack/01_Books/001_明朝那些事儿 与 当年明月（石悦）' },
     ],
 
 
