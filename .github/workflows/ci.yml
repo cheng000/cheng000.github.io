@@ -67,6 +67,11 @@ jobs:
       - name: Install bcryptjs
         run: npm i bcryptjs
 
+        
+      # 代码块折叠：vitepress-plugin-codeblocks-fold
+      - name: Install vitepress-plugin-codeblocks-fold
+        run: npm i vitepress-plugin-codeblocks-fold
+
        # ==================== 安装主题插件 end ==================== #
 
       - name: Build VitePress
