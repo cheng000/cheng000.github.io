@@ -5,8 +5,31 @@ outline: deep
 # Test Examples
 
 <EncryptedContent>
-test
+  This is some sensitive content that requires a password to view.
 </EncryptedContent>
+
+```shell
+12131313
+1312312312
+1
+31
+3131
+3
+123
+12
+321
+3
+21
+3
+123
+1
+3
+1
+31
+3
+
+1
+```
 
 > 该页面是测试页面，用于展示一些vitepress的用法、插件使用方式等。
 

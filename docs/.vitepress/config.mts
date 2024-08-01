@@ -4,6 +4,8 @@ import timeline from "vitepress-markdown-timeline";
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 import { withMagicMove } from 'vitepress-plugin-magic-move'
 
+// import  encryptedContentPlugin from 'vitepress-plugin-encrypted-content'
+
 // https://vitepress.dev/reference/site-config
 export default withMagicMove(defineConfig({
   title: "开发者",
@@ -36,6 +38,7 @@ export default withMagicMove(defineConfig({
   vite: {
     plugins: [
       AutoSidebar(),
+      // encryptedContentPlugin(),
     ],
   },
 

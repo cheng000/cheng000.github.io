@@ -25,6 +25,11 @@ import 'vitepress-copy-helper/style.css'
 // 引入自定义的加密内容组件
 import EncryptedContent from '../components/encrypt/EncryptedContent.vue'
 
+// import  EncryptedContent from 'vitepress-plugin-encrypted-content'
+
+import codeblocksFold from 'vitepress-plugin-codeblocks-fold'; // import method
+import 'vitepress-plugin-codeblocks-fold/style/index.css'; // import style
+
 export default {
   extends: DefaultTheme,
 
@@ -43,6 +48,7 @@ export default {
 
     app.component('C', CopyButton);
     app.component('EncryptedContent', EncryptedContent);
+    // app.component('EncryptedContent', EncryptedContent);
 
   },
 
@@ -50,6 +56,9 @@ export default {
     // Get frontmatter and route
     const { frontmatter } = useData();
     const route = useRoute();
+
+    // 代码折叠
+    codeblocksFold({ route, frontmatter }, true, 400);
         
     // giscus配置
     giscusTalk({
