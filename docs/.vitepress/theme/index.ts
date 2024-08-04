@@ -30,6 +30,8 @@ import EncryptedContent from '../components/encrypt/EncryptedContent.vue'
 import codeblocksFold from 'vitepress-plugin-codeblocks-fold'; // import method
 import 'vitepress-plugin-codeblocks-fold/style/index.css'; // import style
 
+
+
 export default {
   extends: DefaultTheme,
 

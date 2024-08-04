@@ -2,11 +2,20 @@
 outline: deep
 ---
 
+
 # Test Examples
+
+
+<iframe frameborder="0" width="444" height="185" src="https://jex.im/regulex/#!embed=true&flags=&re=%5E%5Cs*(%3F%3D%5B0-9%5D%7B5%7D)"></iframe>
+
 
 <EncryptedContent>
   This is some sensitive content that requires a password to view.
 </EncryptedContent>
+
+<!-- <EncryptedContent password="123">
+  <p>This is the protected content that will only be visible after entering the correct password.</p>
+</EncryptedContent> -->
 
 ```shell
 12131313
