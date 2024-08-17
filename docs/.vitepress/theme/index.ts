@@ -25,8 +25,6 @@ import 'vitepress-copy-helper/style.css'
 // 引入自定义的加密内容组件
 import EncryptedContent from '../components/encrypt/EncryptedContent.vue'
 
-// import  EncryptedContent from 'vitepress-plugin-encrypted-content'
-
 import codeblocksFold from 'vitepress-plugin-codeblocks-fold'; // import method
 import 'vitepress-plugin-codeblocks-fold/style/index.css'; // import style
 
@@ -50,7 +48,6 @@ export default {
 
     app.component('C', CopyButton);
     app.component('EncryptedContent', EncryptedContent);
-    // app.component('EncryptedContent', EncryptedContent);
 
   },
 
