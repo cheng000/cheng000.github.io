@@ -1,7 +1,7 @@
 // cheng000.github.io/docs/.vitepress/components/encrypt/generate-hash.js
 const bcrypt = require('bcryptjs');
 
-const password = 'icbccd'; // 替换为你的新密码 icbccd
+const password = 'ameng'; // 替换为你的新密码 ameng
 const saltRounds = 10;
 
 bcrypt.hash(password, saltRounds, function(err, hash) {
