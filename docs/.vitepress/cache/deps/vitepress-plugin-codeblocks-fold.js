@@ -2,10 +2,10 @@ import {
   nextTick,
   onMounted,
   watch
-} from "./chunk-O4XWQMLZ.js";
-import "./chunk-TDUMLE5V.js";
+} from "./chunk-QIRR7X26.js";
+import "./chunk-VUNV25KB.js";
 
-// node_modules/vitepress-plugin-codeblocks-fold/lib/index.js
+// ../../../../node_modules/vitepress-plugin-codeblocks-fold/lib/index.js
 var themeChangeObserve = null;
 var cbf = (frontmatter, defaultAllFold, height) => {
   let fm = true;

@@ -1,20 +1,19 @@
 import {
   reactive,
   watch
-} from "./chunk-O4XWQMLZ.js";
-import "./chunk-TDUMLE5V.js";
+} from "./chunk-QIRR7X26.js";
+import "./chunk-VUNV25KB.js";
 
-// ../../../../../node_modules/vitepress-plugin-tabs/src/client/index.ts
+// ../../../../node_modules/vitepress-plugin-tabs/src/client/index.ts
 import PluginTabs from "/Users/mikec/node_modules/vitepress-plugin-tabs/src/client/PluginTabs.vue";
 import PluginTabsTab from "/Users/mikec/node_modules/vitepress-plugin-tabs/src/client/PluginTabsTab.vue";
 
-// ../../../../../node_modules/vitepress-plugin-tabs/src/client/useTabsSelectedState.ts
+// ../../../../node_modules/vitepress-plugin-tabs/src/client/useTabsSelectedState.ts
 var injectionKey = "vitepress:tabSharedState";
 var ls = typeof localStorage !== "undefined" ? localStorage : null;
 var localStorageKey = "vitepress:tabsSharedState";
 var setLocalStorageValue = (v) => {
-  if (!ls)
-    return;
+  if (!ls) return;
   ls.setItem(localStorageKey, JSON.stringify(v));
 };
 var provideTabsSharedState = (app) => {
@@ -31,7 +30,7 @@ var provideTabsSharedState = (app) => {
   app.provide(injectionKey, state);
 };
 
-// ../../../../../node_modules/vitepress-plugin-tabs/src/client/index.ts
+// ../../../../node_modules/vitepress-plugin-tabs/src/client/index.ts
 var enhanceAppWithTabs = (app) => {
   provideTabsSharedState(app);
   app.component("PluginTabs", PluginTabs);

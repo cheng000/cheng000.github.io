@@ -72,6 +72,14 @@ jobs:
       - name: Install vitepress-plugin-codeblocks-fold
         run: npm i vitepress-plugin-codeblocks-fold
 
+      # 侧边栏
+      - name: npm install vite-plugin-vitepress-auto-sidebar
+        run: npm install vite-plugin-vitepress-auto-sidebar
+
+       # 公告栏
+      - name: npm install vitepress-plugin-announcement
+        run: npm install vitepress-plugin-announcement
+
        # ==================== 安装主题插件 end ==================== #
 
       - name: Build VitePress
