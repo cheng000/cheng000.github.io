@@ -39,41 +39,41 @@ export default withMagicMove(defineConfig({
       AutoSidebar(
         {collapsed: true}
       ),
-      AnnouncementPlugin({
-        title: '公告',
-        body: [
-          { type: 'text', content: '👇公众号👇 ---👇 赞赏 👇' },
-          {
-            type: 'image',
-            src: 'https://cdn.upyun.sugarat.top/mdImg/sugar/85c9554d023be2fcc5aab94effeef033',
-            style: 'display: inline-block;width:46%;padding-right:6px'
-          },
-          {
-            type: 'image',
-            src: 'https://cdn.upyun.sugarat.top/mdImg/sugar/54eacf3e730af9c1e3542a4800a422ea',
-            style: 'display: inline-block;width:46%;padding-left:6px'
-          }
-        ],
-        footer: [
-          {
-            type: 'text',
-            content: 'footer content'
-          },
-          {
-            type: 'button',
-            content: '作者博客',
-            link: 'https://sugarat.top'
-          },
-          {
-            type: 'button',
-            content: '博客主题',
-            link: 'https://theme.sugarat.top',
-            props: {
-              type: 'success'
-            }
-          },
-        ],
-      })
+      // AnnouncementPlugin({
+      //   title: '公告',
+      //   body: [
+      //     { type: 'text', content: '👇公众号👇 ---👇 赞赏 👇' },
+      //     {
+      //       type: 'image',
+      //       src: 'https://cdn.upyun.sugarat.top/mdImg/sugar/85c9554d023be2fcc5aab94effeef033',
+      //       style: 'display: inline-block;width:46%;padding-right:6px'
+      //     },
+      //     {
+      //       type: 'image',
+      //       src: 'https://cdn.upyun.sugarat.top/mdImg/sugar/54eacf3e730af9c1e3542a4800a422ea',
+      //       style: 'display: inline-block;width:46%;padding-left:6px'
+      //     }
+      //   ],
+      //   footer: [
+      //     {
+      //       type: 'text',
+      //       content: 'footer content'
+      //     },
+      //     {
+      //       type: 'button',
+      //       content: '作者博客',
+      //       link: 'https://sugarat.top'
+      //     },
+      //     {
+      //       type: 'button',
+      //       content: '博客主题',
+      //       link: 'https://theme.sugarat.top',
+      //       props: {
+      //         type: 'success'
+      //       }
+      //     },
+      //   ],
+      // })
     ],
   },
 
@@ -89,6 +89,7 @@ export default withMagicMove(defineConfig({
       { text: 'Projects', link: '/04_Projects/01_Learn-Project/01_项目基础' },
       { text: 'DevSummary', link: '/05_DevSummary/01_Work/001_人机密码分离' },
       { text: 'Cabin&Backpack', link: '/06_Cabin&Backpack/01_Books/001_明朝那些事儿 与 当年明月（石悦）' },
+      { text: 'OurStory', link: '/07_OurStory/01_OurLoveMomentByMonment/001_Dairy' },
     ],
 
 
