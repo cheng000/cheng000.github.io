@@ -1,6 +1,6 @@
-import "./chunk-VUNV25KB.js";
+import "./chunk-TDUMLE5V.js";
 
-// ../../../../node_modules/@giscus/vue/dist/giscus-aTimukGI.mjs
+// ../../../../../node_modules/@giscus/vue/dist/giscus-aTimukGI.mjs
 var H = globalThis;
 var q = H.ShadowRoot && (H.ShadyCSS === void 0 || H.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
 var K = Symbol();
@@ -1018,4 +1018,4 @@ export {
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 */
-//# sourceMappingURL=giscus-aTimukGI-3NGADR5H.js.map
+//# sourceMappingURL=giscus-aTimukGI-7PLH55TL.js.map

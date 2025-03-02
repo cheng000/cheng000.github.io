@@ -7,10 +7,10 @@ import {
   ref,
   unref,
   useSlots
-} from "./chunk-QIRR7X26.js";
-import "./chunk-VUNV25KB.js";
+} from "./chunk-O4XWQMLZ.js";
+import "./chunk-TDUMLE5V.js";
 
-// ../../../../node_modules/vitepress-copy-helper/dist/vitepress-copy-helper.js
+// ../../../../../node_modules/vitepress-copy-helper/dist/vitepress-copy-helper.js
 async function L(l) {
   try {
     return navigator.clipboard.writeText(l);

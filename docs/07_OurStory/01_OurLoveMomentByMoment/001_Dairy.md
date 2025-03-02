@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-<EncryptedContent>
+<!-- <EncryptedContent> -->
  
 # 猪猪和小黄
 
@@ -76,7 +76,28 @@ outline: deep
 ·
 
 ::: timeline 2025-01-04 都江堰
+![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20250226213055.png)
+:::
 
+·
+·
+·
+
+::: timeline 2025-01-10 四川成都
+  小黄吃醋了，但是猪猪也生气了，扯平了，以后小黄再也不阴阳怪气了
+  在大米先生冷冷一个人吃着饭，心里觉得，再这么下去，我会失去猪猪了，赶紧道歉！
+  发现，猪猪真的生气啦
+  小黄认识到了自己的错误
+  下午回到工位，这是一个寒冷的周日，小黄一个人在这个工区加班，愈发觉得应该有一个正式的道歉，
+:::
+
+·
+·
+·
+
+
+::: timeline 2025-01-21 四川广元青川县
+  这里特别冷
 :::
 
 ·
@@ -92,4 +113,4 @@ outline: deep
 ·
 <Timer>
 </Timer>
-</EncryptedContent>
+<!-- </EncryptedContent> -->
