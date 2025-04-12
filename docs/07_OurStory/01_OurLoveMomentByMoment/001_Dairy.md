@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-<!-- <EncryptedContent> -->
+<EncryptedContent>
  
 # 猪猪和小黄
 
@@ -118,4 +118,4 @@ outline: deep
 ·
 <Timer>
 </Timer>
-<!-- </EncryptedContent> -->
+</EncryptedContent>
