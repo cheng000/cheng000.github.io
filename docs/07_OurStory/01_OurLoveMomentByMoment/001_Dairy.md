@@ -104,6 +104,11 @@ outline: deep
 ·
 ·
 
+
+::: timeline 2025-04-04 - 2025-04-06 四川西昌3天2夜 清明节假
+  ![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/IMG_3596.png)
+:::
+
 ::: timeline The Story Continues...
 
 :::
