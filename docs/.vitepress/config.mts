@@ -12,14 +12,16 @@ export default withMagicMove(defineConfig({
   lastUpdated: true,
   // 对 markdown 的配置
   markdown:{
+    toc: {
+      level: [1,2,3,4,5], // 指定标题的层级
+    },
+    
     theme: {
       light: 'vitesse-light',
       dark: 'vitesse-dark',
     },
 
-    toc: {
-      level: [1,2,3,4,5], // 指定标题的层级
-    },
+    
     //行号显示
     lineNumbers: true, 
 

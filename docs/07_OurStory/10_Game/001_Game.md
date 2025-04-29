@@ -1,19 +1,17 @@
----
-outline: deep
----
-
 # Game
+[[toc]]
 
-# 01. 双人成行
+# 1. 双人成行
+
+## 1.1 test
+test
+
+# 2. 双影奇镜
 
 
-
-# 02. 双影奇镜
-
-
-# 03. 王者荣耀
+# 3. 王者荣耀
 
 
-# 04. 微信小游戏-抓大鹅
+# 4. 微信小游戏-抓大鹅
 ![](https://ameng000.oss-cn-chengdu.aliyuncs.com/vitepress-blog/IMG_3831.PNG)  
 

@@ -1,10 +1,9 @@
----
-outline: deep
----
 
 <EncryptedContent>
  
 # 猪猪和小黄
+
+[[toc]]
 
 <Timer>
 </Timer>
