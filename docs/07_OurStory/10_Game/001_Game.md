@@ -15,3 +15,4 @@ test
 # 4. 微信小游戏-抓大鹅
 ![](https://ameng000.oss-cn-chengdu.aliyuncs.com/vitepress-blog/IMG_3831.PNG)  
 
+<p align="center"> <img src="https://ameng000.oss-cn-chengdu.aliyuncs.com/vitepress-blog/CPA Helper二维码.png"  width="500" /> </p>

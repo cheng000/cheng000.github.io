@@ -82,7 +82,7 @@ yarn -v
 
 ## 1. 变量
 
-![](https://raw.githubusercontent.com/cheng000/picture/main/vitepress-blog/20240427191931.png)
+![](https://ameng000.oss-cn-chengdu.aliyuncs.com/vitepress-blog/20240427191931.png)
 
 # aaaa
 
