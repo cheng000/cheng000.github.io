@@ -80,6 +80,10 @@ jobs:
       - name: npm install vitepress-plugin-announcement
         run: npm install vitepress-plugin-announcement
 
+      # echarts 相关
+      - name: npm install echarts@6.0.0
+        run: npm install echarts@6.0.0
+
        # ==================== 安装主题插件 end ==================== #
 
       - name: Build VitePress
