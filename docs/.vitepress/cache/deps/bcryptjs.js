@@ -1,7 +1,7 @@
 import {
   __commonJS,
   __require
-} from "./chunk-VUNV25KB.js";
+} from "./chunk-34Z2WVG2.js";
 
 // browser-external:crypto
 var require_crypto = __commonJS({
@@ -9,7 +9,7 @@ var require_crypto = __commonJS({
     module.exports = Object.create(new Proxy({}, {
       get(_, key) {
         if (key !== "__esModule" && key !== "__proto__" && key !== "constructor" && key !== "splice") {
-          console.warn(`Module "crypto" has been externalized for browser compatibility. Cannot access "crypto.${key}" in client code. See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.`);
+          console.warn(`Module "crypto" has been externalized for browser compatibility. Cannot access "crypto.${key}" in client code. See https://vitejs.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.`);
         }
       }
     }));
@@ -208,7 +208,8 @@ var require_bcrypt = __commonJS({
       function stringToBytes(str) {
         var out = [], i = 0;
         utfx.encodeUTF16toUTF8(function() {
-          if (i >= str.length) return null;
+          if (i >= str.length)
+            return null;
           return str.charCodeAt(i++);
         }, function(b) {
           out.push(b);
@@ -450,7 +451,8 @@ var require_bcrypt = __commonJS({
               ((b = src()) === null || (c = src()) === null) && fail([a, b, c]), dst((a & 15) << 12 | (b & 63) << 6 | c & 63);
             else if ((a & 248) === 240)
               ((b = src()) === null || (c = src()) === null || (d = src()) === null) && fail([a, b, c, d]), dst((a & 7) << 18 | (b & 63) << 12 | (c & 63) << 6 | d & 63);
-            else throw RangeError("Illegal starting byte: " + a);
+            else
+              throw RangeError("Illegal starting byte: " + a);
           }
         };
         utfx2.UTF16toUTF8 = function(src, dst) {
@@ -469,7 +471,8 @@ var require_bcrypt = __commonJS({
             }
             dst(c1);
           }
-          if (c2 !== null) dst(c2);
+          if (c2 !== null)
+            dst(c2);
         };
         utfx2.UTF8toUTF16 = function(src, dst) {
           var cp = null;
