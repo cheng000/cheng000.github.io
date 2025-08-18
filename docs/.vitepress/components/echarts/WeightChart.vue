@@ -1,4 +1,4 @@
-<!-- WeightChart.vue - 专门处理体重数据的图表组件 -->
+<!-- WeightChart.vue - 支持备注的体重图表组件 -->
 <template>
   <ClientOnly>
     <div :id="chartId" :style="{ width, height }"></div>
@@ -16,7 +16,9 @@ import { ref, onMounted, watch, onUnmounted, nextTick } from 'vue'
 export default {
   name: 'WeightChart',
   props: {
-    // JSON格式的体重数据: { "2024-01-01": 2500, "2024-01-02": 2520, ... }
+    // 支持两种数据格式:
+    // 格式1: { "2024-01-01": 2500, "2024-01-02": 2520 }
+    // 格式2: { "2024-01-01": { weight: 2500, note: "第一次称重" } }
     weightData: {
       type: Object,
       required: true,
@@ -91,15 +93,30 @@ export default {
     }
     
     const processWeightData = () => {
-      // 将JSON格式转换为ECharts需要的格式
-      const dates = Object.keys(props.weightData).sort() // 按日期排序
-      const weights = dates.map(date => {
-        const weight = props.weightData[date]
-        // 根据单位转换数据
-        return props.unit === 'kg' ? (weight / 1000) : weight
+      // 处理两种数据格式
+      const sortedEntries = Object.entries(props.weightData).sort(([a], [b]) => a.localeCompare(b))
+      
+      const dates = []
+      const weights = []
+      const notes = []
+      
+      sortedEntries.forEach(([date, value]) => {
+        dates.push(date)
+        
+        if (typeof value === 'object' && value !== null) {
+          // 格式2: { weight: 2500, note: "备注" }
+          const weight = props.unit === 'kg' ? (value.weight / 1000) : value.weight
+          weights.push(weight)
+          notes.push(value.note || '')
+        } else {
+          // 格式1: 直接是数值
+          const weight = props.unit === 'kg' ? (value / 1000) : value
+          weights.push(weight)
+          notes.push('')
+        }
       })
       
-      return { dates, weights }
+      return { dates, weights, notes }
     }
     
     const formatDate = (dateStr) => {
@@ -116,7 +133,7 @@ export default {
     const updateChart = () => {
       if (!chart) return
       
-      const { dates, weights } = processWeightData()
+      const { dates, weights, notes } = processWeightData()
       
       if (dates.length === 0) {
         console.warn('没有体重数据')
@@ -131,6 +148,14 @@ export default {
       const minWeight = Math.min(...weights)
       const avgWeight = weights.reduce((sum, w) => sum + w, 0) / weights.length
       const weightChange = weights.length > 1 ? weights[weights.length - 1] - weights[0] : 0
+      
+      // 为每个数据点创建带有备注信息的对象
+      const seriesData = weights.map((weight, index) => ({
+        value: weight,
+        note: notes[index],
+        originalDate: dates[index],
+        formattedDate: formattedDates[index]
+      }))
       
       const defaultOptions = {
         title: {
@@ -153,21 +178,40 @@ export default {
           },
           formatter: function(params) {
             const param = params[0]
-            const originalDate = dates[param.dataIndex]
-            const weight = param.value
-            const change = param.dataIndex > 0 ? 
-              (weight - weights[param.dataIndex - 1]).toFixed(1) : 0
+            const dataItem = param.data
+            const weight = dataItem.value
+            const note = dataItem.note
+            const originalDate = dataItem.originalDate
+            
+            // 计算与前一天的变化
+            const prevIndex = param.dataIndex - 1
+            let changeText = ''
+            if (prevIndex >= 0) {
+              const prevWeight = seriesData[prevIndex].value
+              const change = (weight - prevWeight).toFixed(1)
+              const changeColor = change > 0 ? '#67C23A' : change < 0 ? '#F56C6C' : '#909399'
+              changeText = `<div style="margin-top: 8px;">变化: <span style="color: ${changeColor}; font-weight: bold;">${change > 0 ? '+' : ''}${change}${props.unit}</span></div>`
+            }
+            
+            // 备注信息
+            const noteText = note ? `<div style="margin-top: 8px; padding: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; font-style: italic; color: #666;">📝 ${note}</div>` : ''
             
             return `
-              <div style="font-size: 14px;">
-                <div><strong>${originalDate}</strong></div>
-                <div>体重: <strong>${weight}${props.unit}</strong></div>
-                ${param.dataIndex > 0 ? 
-                  `<div>变化: <span style="color: ${change > 0 ? '#67C23A' : '#F56C6C'}">${change > 0 ? '+' : ''}${change}${props.unit}</span></div>` 
-                  : ''}
+              <div style="font-size: 14px; line-height: 1.5;">
+                <div style="font-weight: bold; margin-bottom: 8px;">📅 ${originalDate}</div>
+                <div>体重: <span style="color: ${props.lineColor}; font-weight: bold; font-size: 16px;">${weight}${props.unit}</span></div>
+                ${changeText}
+                ${noteText}
               </div>
             `
-          }
+          },
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          borderColor: props.lineColor,
+          borderWidth: 1,
+          textStyle: {
+            color: '#333'
+          },
+          extraCssText: 'box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; padding: 12px;'
         },
         legend: {
           data: ['体重'],
@@ -226,18 +270,46 @@ export default {
           {
             name: '体重',
             type: 'line',
-            data: weights,
+            data: seriesData,
             smooth: true,
             symbol: props.showSymbol ? 'circle' : 'none',
-            symbolSize: 6,
+            symbolSize: function(value, params) {
+              // 如果有备注，显示更大的符号
+              return params.data.note ? 8 : 6
+            },
             lineStyle: {
               color: props.lineColor,
               width: 2
             },
             itemStyle: {
-              color: props.lineColor,
+              color: function(params) {
+                // 有备注的点使用不同颜色
+                return params.data.note ? '#FF6B6B' : props.lineColor
+              },
               borderColor: '#fff',
               borderWidth: 2
+            },
+            // 为有备注的点添加特殊标记
+            markPoint: {
+              symbol: 'pin',
+              symbolSize: [20, 30],
+              data: seriesData.map((item, index) => {
+                if (item.note) {
+                  return {
+                    name: '备注',
+                    coord: [index, item.value],
+                    itemStyle: {
+                      color: '#FF6B6B',
+                      borderColor: '#fff',
+                      borderWidth: 2
+                    },
+                    label: {
+                      show: false
+                    }
+                  }
+                }
+                return null
+              }).filter(Boolean)
             },
             areaStyle: props.showArea ? {
               color: {
@@ -262,16 +334,10 @@ export default {
               label: {
                 formatter: `平均: {c}${props.unit}`
               }
-            } : null,
-            markPoint: {
-              data: [
-                { type: 'max', name: '最高', itemStyle: { color: '#67C23A' } },
-                { type: 'min', name: '最低', itemStyle: { color: '#F56C6C' } }
-              ]
-            }
+            } : null
           }
         ],
-        // 添加数据概览
+        // 添加数据概览和备注说明
         graphic: [
           {
             type: 'group',
@@ -280,18 +346,20 @@ export default {
             children: [
               {
                 type: 'rect',
-                shape: { width: 120, height: 80 },
+                shape: { width: 140, height: notes.some(n => n) ? 110 : 80 },
                 style: {
-                  fill: 'rgba(255,255,255,0.9)',
+                  fill: 'rgba(255,255,255,0.95)',
                   stroke: '#E4E7ED',
-                  lineWidth: 1
+                  lineWidth: 1,
+                  shadowColor: 'rgba(0,0,0,0.1)',
+                  shadowBlur: 4
                 }
               },
               {
                 type: 'text',
                 style: {
                   text: '数据统计',
-                  x: 60,
+                  x: 70,
                   y: 15,
                   textAlign: 'center',
                   fontSize: 12,
@@ -303,7 +371,7 @@ export default {
                 style: {
                   text: `最高: ${maxWeight.toFixed(1)}${props.unit}`,
                   x: 10,
-                  y: 30,
+                  y: 32,
                   fontSize: 10,
                   fill: '#67C23A'
                 }
@@ -313,7 +381,7 @@ export default {
                 style: {
                   text: `最低: ${minWeight.toFixed(1)}${props.unit}`,
                   x: 10,
-                  y: 45,
+                  y: 47,
                   fontSize: 10,
                   fill: '#F56C6C'
                 }
@@ -323,7 +391,7 @@ export default {
                 style: {
                   text: `平均: ${avgWeight.toFixed(1)}${props.unit}`,
                   x: 10,
-                  y: 60,
+                  y: 62,
                   fontSize: 10,
                   fill: '#909399'
                 }
@@ -331,13 +399,35 @@ export default {
               {
                 type: 'text',
                 style: {
-                  text: `记录: ${dates.length}次`,
+                  text: `记录: ${dates.length}天`,
                   x: 10,
-                  y: 75,
+                  y: 77,
                   fontSize: 10,
                   fill: '#606266'
                 }
-              }
+              },
+              // 如果有备注，显示图例说明
+              ...(notes.some(n => n) ? [
+                {
+                  type: 'circle',
+                  shape: { r: 3 },
+                  style: {
+                    x: 15,
+                    y: 95,
+                    fill: '#FF6B6B'
+                  }
+                },
+                {
+                  type: 'text',
+                  style: {
+                    text: '有备注',
+                    x: 25,
+                    y: 100,
+                    fontSize: 9,
+                    fill: '#666'
+                  }
+                }
+              ] : [])
             ]
           }
         ]
