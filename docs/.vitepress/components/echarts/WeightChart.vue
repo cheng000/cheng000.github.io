@@ -165,10 +165,10 @@ export default {
             fontSize: 16,
             fontWeight: 'bold'
           },
-          subtext: `变化: ${weightChange > 0 ? '+' : ''}${weightChange.toFixed(1)}${props.unit}`,
-          subtextStyle: {
-            color: weightChange > 0 ? '#67C23A' : weightChange < 0 ? '#F56C6C' : '#909399'
-          }
+          // subtext: `变化: ${weightChange > 0 ? '+' : ''}${weightChange.toFixed(1)}${props.unit}`,
+          // subtextStyle: {
+          //   color: weightChange > 0 ? '#67C23A' : weightChange < 0 ? '#F56C6C' : '#909399'
+          // }
         },
         tooltip: {
           trigger: 'axis',
@@ -194,11 +194,11 @@ export default {
             }
             
             // 备注信息
-            const noteText = note ? `<div style="margin-top: 8px; padding: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; font-style: italic; color: #666;">📝 ${note}</div>` : ''
+            const noteText = note ? `<div style="margin-top: 8px; padding: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; font-style: italic; color: #666; word-wrap: break-word; word-break: break-word; white-space: pre-wrap; max-width: 100%;">📝 ${note}</div>` : '';
             
             return `
               <div style="font-size: 14px; line-height: 1.5;">
-                <div style="font-weight: bold; margin-bottom: 8px;">📅 ${originalDate}</div>
+                <div style="font-weight: bold; margin-bottom: 8px;">${originalDate}</div>
                 <div>体重: <span style="color: ${props.lineColor}; font-weight: bold; font-size: 16px;">${weight}${props.unit}</span></div>
                 ${changeText}
                 ${noteText}
@@ -219,7 +219,7 @@ export default {
         },
         grid: {
           left: '3%',
-          right: '4%',
+          right: '20%',
           bottom: '8%',
           top: '15%',
           containLabel: true
@@ -268,14 +268,14 @@ export default {
         },
         series: [
           {
-            name: '体重',
+            name: '体重111',
             type: 'line',
             data: seriesData,
             smooth: true,
             symbol: props.showSymbol ? 'circle' : 'none',
             symbolSize: function(value, params) {
               // 如果有备注，显示更大的符号
-              return params.data.note ? 8 : 6
+              return params.data.note ? 10 : 6
             },
             lineStyle: {
               color: props.lineColor,
@@ -292,7 +292,7 @@ export default {
             // 为有备注的点添加特殊标记
             markPoint: {
               symbol: 'pin',
-              symbolSize: [20, 30],
+              symbolSize: [20, 20],
               data: seriesData.map((item, index) => {
                 if (item.note) {
                   return {
@@ -341,12 +341,12 @@ export default {
         graphic: [
           {
             type: 'group',
-            right: 20,
+            right: 450,
             top: 60,
             children: [
               {
                 type: 'rect',
-                shape: { width: 140, height: notes.some(n => n) ? 110 : 80 },
+                shape: { width: 140, height: notes.some(n => n) ? 80 : 50 },
                 style: {
                   fill: 'rgba(255,255,255,0.95)',
                   stroke: '#E4E7ED',
@@ -360,7 +360,7 @@ export default {
                 style: {
                   text: '数据统计',
                   x: 70,
-                  y: 15,
+                  y: 5,
                   textAlign: 'center',
                   fontSize: 12,
                   fontWeight: 'bold'
@@ -371,7 +371,7 @@ export default {
                 style: {
                   text: `最高: ${maxWeight.toFixed(1)}${props.unit}`,
                   x: 10,
-                  y: 32,
+                  y: 22,
                   fontSize: 10,
                   fill: '#67C23A'
                 }
@@ -381,7 +381,7 @@ export default {
                 style: {
                   text: `最低: ${minWeight.toFixed(1)}${props.unit}`,
                   x: 10,
-                  y: 47,
+                  y: 37,
                   fontSize: 10,
                   fill: '#F56C6C'
                 }
@@ -389,45 +389,14 @@ export default {
               {
                 type: 'text',
                 style: {
-                  text: `平均: ${avgWeight.toFixed(1)}${props.unit}`,
+                  text: `记录: ${dates.length}天`,
                   x: 10,
-                  y: 62,
+                  y: 52,
                   fontSize: 10,
                   fill: '#909399'
                 }
               },
-              {
-                type: 'text',
-                style: {
-                  text: `记录: ${dates.length}天`,
-                  x: 10,
-                  y: 77,
-                  fontSize: 10,
-                  fill: '#606266'
-                }
-              },
-              // 如果有备注，显示图例说明
-              ...(notes.some(n => n) ? [
-                {
-                  type: 'circle',
-                  shape: { r: 3 },
-                  style: {
-                    x: 15,
-                    y: 95,
-                    fill: '#FF6B6B'
-                  }
-                },
-                {
-                  type: 'text',
-                  style: {
-                    text: '有备注',
-                    x: 25,
-                    y: 100,
-                    fontSize: 9,
-                    fill: '#666'
-                  }
-                }
-              ] : [])
+            
             ]
           }
         ]
