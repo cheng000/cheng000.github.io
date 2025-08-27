@@ -1,4 +1,76 @@
-<template>
+preloadImages() {
+      // 预加载所有图片到内存缓存
+      this.imageList.forEach((src, index) => {
+        if (!this.imageCache.has(src)) {
+          const img = new Image()
+          img.crossOrigin = 'anonymous' // 支持跨域图片
+          
+          img.onload = () => {
+            // 将图片转换为blob URL进行本地缓存
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+            canvas.width = img.naturalWidth
+            canvas.height = img.naturalHeight
+            ctx.drawImage(img, 0, 0)
+            
+            canvas.toBlob((blob) => {
+              if (blob) {
+                const blobUrl = URL.createObjectURL(blob)
+                this.imageCache.set(src, blobUrl)
+                this.loadedImages.add(index)
+                console.log(`图片 ${index + 1} 已缓存到本地`)
+              }
+            }, 'image/jpeg', 0.9)
+          }
+          
+          img.onerror = () => {
+            console.warn(`图片预加载失败: ${src}`)
+            // 失败时仍使用原始URL
+            this.imageCache.set(src, src)
+          }
+          
+          img.src = src
+        }
+      })
+    },
+    
+    preloadAdjacentImages(currentIndex) {
+      // 预加载当前图片的前后两张图片（智能预加载）
+      const adjacentIndices = [
+        (currentIndex - 1 + this.imageList.length) % this.imageList.length,
+        (currentIndex + 1) % this.imageList.length
+      ]
+      
+      adjacentIndices.forEach(index => {
+        const src = this.imageList[index]
+        if (src && !this.imageCache.has(src)) {
+          const img = new Image()
+          img.crossOrigin = 'anonymous'
+          
+          img.onload = () => {
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+            canvas.width = img.naturalWidth
+            canvas.height = img.naturalHeight
+            ctx.drawImage(img, 0, 0)
+            
+            canvas.toBlob((blob) => {
+              if (blob) {
+                const blobUrl = URL.createObjectURL(blob)
+                this.imageCache.set(src, blobUrl)
+                this.loadedImages.add(index)
+              }
+            }, 'image/jpeg', 0.9)
+          }
+          
+          img.onerror = () => {
+            this.imageCache.set(src, src)
+          }
+          
+          img.src = src
+        }
+      })
+    }<template>
   <div class="cat-carousel-3d">
     <div 
       class="carousel-container" 
@@ -24,11 +96,12 @@
           <div class="slide-content">
             <div class="glass-overlay"></div>
             <img 
-              :src="image" 
+              :src="getCachedImageSrc(image, index)" 
               :alt="`猫咪图片 ${index + 1}`"
               class="slide-image"
               @load="onImageLoad(index)"
               @error="onImageError(index)"
+              @loadstart="onImageLoadStart(index)"
             />
             <div v-if="loadingImages.includes(index) && !loadedImages.has(index)" class="loading-overlay">
               <div class="loading-spinner"></div>
@@ -115,6 +188,7 @@ export default {
       showNavButtons: false,
       loadingImages: [],
       loadedImages: new Set(),
+      imageCache: new Map(),
       touchStartTime: 0
     }
   },
@@ -134,103 +208,241 @@ export default {
     }
   },
   mounted() {
-    // 初始化第一张图片的加载状态
-    if (this.imageList.length > 0) {
-      this.loadingImages = [0]
-    }
+    // 预加载所有图片到内存缓存
+    this.preloadImages()
+    
     if (this.autoPlay && this.imageList.length > 1) {
       this.startAutoPlay()
     }
   },
   beforeUnmount() {
     this.clearAutoPlay()
+    this.clearImageCache()
   },
   methods: {
-    nextImage() {
-      this.currentIndex = (this.currentIndex + 1) % this.imageList.length
-    },
-    prevImage() {
-      this.currentIndex = this.currentIndex === 0 
-        ? this.imageList.length - 1 
-        : this.currentIndex - 1
-    },
-    goToImage(index) {
-      if (index !== this.currentIndex) {
-        this.currentIndex = index
+  // 预加载所有图片（默认直接使用浏览器缓存）
+  preloadImages() {
+    this.imageList.forEach((src, index) => {
+      if (!this.imageCache.has(src)) {
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+
+        img.onload = () => {
+          // 这里直接用原始 src（浏览器已有缓存），避免额外 blob 开销
+          this.imageCache.set(src, src)
+          this.cachedImages.add(index)
+          console.log(`图片 ${index + 1} 已缓存`)
+        }
+
+        img.onerror = () => {
+          console.warn(`图片预加载失败: ${src}`)
+          this.imageCache.set(src, src) // 失败时也存原始地址，避免后续空引用
+        }
+
+        img.src = src
       }
-    },
-    isVisibleSlide(index) {
-      return index === this.currentIndex || 
-             index === this.prevIndex || 
-             index === this.nextIndex
-    },
-    startAutoPlay() {
-      if (this.autoPlay && this.imageList.length > 1) {
-        this.autoPlayTimer = setInterval(() => {
-          this.nextImage()
-        }, this.autoPlayInterval)
+    })
+  },
+
+  // 预加载相邻图片
+  preloadAdjacentImages(currentIndex) {
+    const adjacentIndices = [
+      (currentIndex - 1 + this.imageList.length) % this.imageList.length,
+      (currentIndex + 1) % this.imageList.length
+    ]
+
+    adjacentIndices.forEach(index => {
+      const src = this.imageList[index]
+      if (src && !this.imageCache.has(src)) {
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+
+        img.onload = () => {
+          this.imageCache.set(src, src)
+          this.cachedImages.add(index)
+        }
+
+        img.onerror = () => {
+          this.imageCache.set(src, src)
+        }
+
+        img.src = src
       }
-    },
-    pauseAutoPlay() {
-      this.clearAutoPlay()
-    },
-    clearAutoPlay() {
-      if (this.autoPlayTimer) {
-        clearInterval(this.autoPlayTimer)
-        this.autoPlayTimer = null
+    })
+  },
+
+  // 清理缓存，释放 blob URL
+  clearImageCache() {
+    this.imageCache.forEach((value) => {
+      if (typeof value === 'string' && value.startsWith('blob:')) {
+        URL.revokeObjectURL(value)
       }
-    },
-    onMouseEnter() {
-      this.showNavButtons = true
-      this.pauseAutoPlay()
-    },
-    onMouseLeave() {
-      this.showNavButtons = false
-      if (this.autoPlay && this.imageList.length > 1) {
-        this.startAutoPlay()
-      }
-    },
-    onTouchStart() {
-      this.touchStartTime = Date.now()
-      this.pauseAutoPlay()
-    },
-    onTouchEnd() {
-      // 短触摸后恢复自动播放
-      if (Date.now() - this.touchStartTime < 200) {
-        setTimeout(() => {
-          if (this.autoPlay && this.imageList.length > 1) {
-            this.startAutoPlay()
-          }
-        }, 2000)
-      }
-    },
-    onImageLoad(index) {
-      this.loadingImages = this.loadingImages.filter(i => i !== index)
-      this.loadedImages.add(index)
-    },
-    onImageError(index) {
-      this.loadingImages = this.loadingImages.filter(i => i !== index)
-      console.warn('图片加载失败:', this.imageList[index])
+    })
+    this.imageCache.clear()
+    this.cachedImages.clear()
+  },
+
+  getCachedImageSrc(originalSrc) {
+    return this.imageCache.get(originalSrc) || originalSrc
+  },
+
+  onImageLoadStart(index) {
+    if (!this.loadingImages.includes(index)) {
+      this.loadingImages.push(index)
     }
   },
+  onImageLoad(index) {
+    this.loadingImages = this.loadingImages.filter(i => i !== index)
+    this.loadedImages.add(index)
+  },
+  onImageError(index) {
+    this.loadingImages = this.loadingImages.filter(i => i !== index)
+    console.warn('图片加载失败:', this.imageList[index])
+  },
+  isVisibleSlide(index) {
+    return (
+      index === this.currentIndex ||
+      index === this.prevIndex ||
+      index === this.nextIndex
+    )
+  },
+  // 自动播放启动
+  startAutoPlay() {
+    // 避免重复创建 timer
+    if (this.autoPlayTimer) return
+    if (this.autoPlay && this.imageList.length > 1) {
+      this.autoPlayTimer = setInterval(() => {
+        this.nextImage()
+      }, this.autoPlayInterval)
+    }
+  },
+
+  // 暂停/清理自动播放
+  pauseAutoPlay() {
+    this.clearAutoPlay()
+  },
+  clearAutoPlay() {
+    if (this.autoPlayTimer) {
+      clearInterval(this.autoPlayTimer)
+      this.autoPlayTimer = null
+    }
+  },
+
+  // 预加载（使用之前给你的简化版本）
+  preloadImages() {
+    this.imageList.forEach((src, index) => {
+      if (!this.imageCache.has(src)) {
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+        img.onload = () => {
+          this.imageCache.set(src, src)
+          this.cachedImages.add(index)
+        }
+        img.onerror = () => {
+          this.imageCache.set(src, src)
+        }
+        img.src = src
+      }
+    })
+  },
+
+  preloadAdjacentImages(currentIndex) {
+    const adjacent = [
+      (currentIndex - 1 + this.imageList.length) % this.imageList.length,
+      (currentIndex + 1) % this.imageList.length
+    ]
+    adjacent.forEach(index => {
+      const src = this.imageList[index]
+      if (src && !this.imageCache.has(src)) {
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+        img.onload = () => {
+          this.imageCache.set(src, src)
+          this.cachedImages.add(index)
+        }
+        img.onerror = () => {
+          this.imageCache.set(src, src)
+        }
+        img.src = src
+      }
+    })
+  },
+
+  // 清理缓存（如果存在 blob URL 则 revoke）
+  clearImageCache() {
+    this.imageCache.forEach((value) => {
+      if (typeof value === 'string' && value.startsWith('blob:')) {
+        URL.revokeObjectURL(value)
+      }
+    })
+    this.imageCache.clear()
+    this.cachedImages.clear()
+  },
+
+  // 其余方法（导航/显示/图片事件等），确保存在：
+  nextImage() { this.currentIndex = (this.currentIndex + 1) % this.imageList.length },
+  prevImage() { this.currentIndex = this.currentIndex === 0 ? this.imageList.length - 1 : this.currentIndex - 1 },
+  goToImage(index) { if (index !== this.currentIndex) this.currentIndex = index },
+
+  isVisibleSlide(index) {
+    return index === this.currentIndex || index === this.prevIndex || index === this.nextIndex
+  },
+
+  onImageLoadStart(index) {
+    if (!this.loadingImages.includes(index)) this.loadingImages.push(index)
+  },
+  onImageLoad(index) {
+    this.loadingImages = this.loadingImages.filter(i => i !== index)
+    this.loadedImages.add(index)
+  },
+  onImageError(index) {
+    this.loadingImages = this.loadingImages.filter(i => i !== index)
+    console.warn('图片加载失败:', this.imageList[index])
+  },
+
+  onMouseEnter() { this.showNavButtons = true; this.pauseAutoPlay() },
+  onMouseLeave() { this.showNavButtons = false; if (this.autoPlay) this.startAutoPlay() },
+  onTouchStart() { this.touchStartTime = Date.now(); this.pauseAutoPlay() },
+  onTouchEnd() {
+    if (Date.now() - this.touchStartTime < 200) {
+      setTimeout(()=> { if (this.autoPlay) this.startAutoPlay() }, 2000)
+    }
+  }
+},
+
+data() {
+  return {
+    currentIndex: 0,
+    autoPlayTimer: null,
+    showNavButtons: false,
+    loadingImages: [],
+    loadedImages: new Set(), // UI 上实际加载完成的
+    cachedImages: new Set(), // 预加载（缓存完成的）
+    imageCache: new Map(),
+    touchStartTime: 0
+  }
+},
+
   watch: {
     currentIndex(newIndex) {
-      // 只有当图片未曾加载过时才显示loading状态
-      if (!this.loadedImages.has(newIndex) && !this.loadingImages.includes(newIndex)) {
-        this.loadingImages.push(newIndex)
-      }
+      // 预加载相邻图片
+      this.preloadAdjacentImages(newIndex)
     },
     list: {
       handler() {
         this.currentIndex = 0
-        this.loadingImages = [0]
+        this.loadingImages = []
         this.loadedImages.clear()
+        this.clearImageCache()
         this.clearAutoPlay()
-        if (this.autoPlay && this.imageList.length > 1) {
-          this.$nextTick(() => {
+        
+        // 重新预加载新的图片列表
+        this.$nextTick(() => {
+          this.preloadImages()
+          if (this.autoPlay && this.imageList.length > 1) {
             this.startAutoPlay()
-          })
-        }
+          }
+        })
       },
       deep: true
     }
