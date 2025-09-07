@@ -1,7 +1,7 @@
 <!-- WeightChart.vue - 支持备注的体重图表组件 -->
 <template>
   <ClientOnly>
-    <div :id="chartId" :style="{ width, height }"></div>
+    <div :id="chartId" :style="{ width, height }" class="weight-chart-container"></div>
     <template #fallback>
       <div class="chart-loading">
         <div class="loading-text">体重数据加载中...</div>
@@ -68,6 +68,12 @@ export default {
   setup(props) {
     const chartId = `weight-chart-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     let chart = null
+    let resizeTimer = null
+    
+    // 检测是否为移动设备
+    const isMobile = () => {
+      return window.innerWidth <= 768
+    }
     
     onMounted(async () => {
       await nextTick()
@@ -84,7 +90,7 @@ export default {
           chart = echartsLib.init(dom)
           updateChart()
           
-          // 监听窗口大小变化
+          // 监听窗口大小变化，使用防抖
           window.addEventListener('resize', handleResize)
         }
       } catch (error) {
@@ -157,18 +163,17 @@ export default {
         formattedDate: formattedDates[index]
       }))
       
+      // 根据设备类型调整配置
+      const mobile = isMobile()
+      
       const defaultOptions = {
         title: {
           text: props.title,
           left: 'center',
           textStyle: {
-            fontSize: 16,
+            fontSize: mobile ? 14 : 16,
             fontWeight: 'bold'
-          },
-          // subtext: `变化: ${weightChange > 0 ? '+' : ''}${weightChange.toFixed(1)}${props.unit}`,
-          // subtextStyle: {
-          //   color: weightChange > 0 ? '#67C23A' : weightChange < 0 ? '#F56C6C' : '#909399'
-          // }
+          }
         },
         tooltip: {
           trigger: 'axis',
@@ -176,6 +181,7 @@ export default {
             type: 'cross',
             animation: false
           },
+          confine: true, // 限制tooltip在图表区域内
           formatter: function(params) {
             const param = params[0]
             const dataItem = param.data
@@ -194,12 +200,12 @@ export default {
             }
             
             // 备注信息
-            const noteText = note ? `<div style="margin-top: 8px; padding: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; font-style: italic; color: #666; word-wrap: break-word; word-break: break-word; white-space: pre-wrap; max-width: 100%;">📝 ${note}</div>` : '';
+            const noteText = note ? `<div style="margin-top: 8px; padding: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; font-style: italic; color: #666; word-wrap: break-word; word-break: break-word; white-space: pre-wrap; max-width: ${mobile ? '200px' : '300px'};">📝 ${note}</div>` : '';
             
             return `
-              <div style="font-size: 14px; line-height: 1.5;">
+              <div style="font-size: ${mobile ? '12px' : '14px'}; line-height: 1.5;">
                 <div style="font-weight: bold; margin-bottom: 8px;">${originalDate}</div>
-                <div>体重: <span style="color: ${props.lineColor}; font-weight: bold; font-size: 16px;">${weight}${props.unit}</span></div>
+                <div>体重: <span style="color: ${props.lineColor}; font-weight: bold; font-size: ${mobile ? '14px' : '16px'};">${weight}${props.unit}</span></div>
                 ${changeText}
                 ${noteText}
               </div>
@@ -215,39 +221,46 @@ export default {
         },
         legend: {
           data: ['体重'],
-          top: 35
+          top: mobile ? 30 : 35,
+          show: !mobile // 移动端隐藏图例以节省空间
         },
         grid: {
-          left: '3%',
-          right: '20%',
-          bottom: '8%',
-          top: '15%',
+          left: mobile ? '8%' : '3%',
+          right: mobile ? '8%' : '4%', // 移动端减少右侧边距，确保内容显示完整
+          bottom: mobile ? '12%' : '8%',
+          top: mobile ? '12%' : '15%',
           containLabel: true
         },
         xAxis: {
           type: 'category',
           data: formattedDates,
           axisLabel: {
-            rotate: dates.length > 10 ? 45 : 0,
-            fontSize: 12
+            rotate: mobile ? (dates.length > 5 ? 45 : 0) : (dates.length > 10 ? 45 : 0),
+            fontSize: mobile ? 10 : 12,
+            interval: mobile && dates.length > 10 ? 'auto' : 0, // 移动端自动间隔显示
+            showMaxLabel: true,
+            showMinLabel: true
           },
           axisLine: {
             lineStyle: { color: '#E4E7ED' }
           },
           axisTick: {
             alignWithLabel: true
-          }
+          },
+          // 确保最后一个标签显示
+          boundaryGap: false
         },
         yAxis: {
           type: 'value',
-          name: `体重 (${props.unit})`,
+          name: mobile ? props.unit : `体重 (${props.unit})`,
           nameLocation: 'middle',
-          nameGap: 50,
+          nameGap: mobile ? 30 : 50,
           nameTextStyle: {
-            fontSize: 12
+            fontSize: mobile ? 10 : 12
           },
           axisLabel: {
-            formatter: value => `${value}${props.unit}`
+            formatter: value => mobile ? `${value}` : `${value}${props.unit}`,
+            fontSize: mobile ? 10 : 12
           },
           axisLine: {
             lineStyle: { color: '#E4E7ED' }
@@ -268,18 +281,19 @@ export default {
         },
         series: [
           {
-            name: '体重111',
+            name: '体重',
             type: 'line',
             data: seriesData,
             smooth: true,
             symbol: props.showSymbol ? 'circle' : 'none',
             symbolSize: function(value, params) {
               // 如果有备注，显示更大的符号
-              return params.data.note ? 10 : 6
+              const baseSize = mobile ? 4 : 6
+              return params.data.note ? baseSize + 4 : baseSize
             },
             lineStyle: {
               color: props.lineColor,
-              width: 2
+              width: mobile ? 1.5 : 2
             },
             itemStyle: {
               color: function(params) {
@@ -287,10 +301,10 @@ export default {
                 return params.data.note ? '#FF6B6B' : props.lineColor
               },
               borderColor: '#fff',
-              borderWidth: 2
+              borderWidth: mobile ? 1 : 2
             },
             // 为有备注的点添加特殊标记
-            markPoint: {
+            markPoint: mobile ? null : { // 移动端隐藏标记点以简化界面
               symbol: 'pin',
               symbolSize: [20, 20],
               data: seriesData.map((item, index) => {
@@ -321,7 +335,7 @@ export default {
                 ]
               }
             } : null,
-            markLine: weights.length > 1 ? {
+            markLine: (weights.length > 1 && !mobile) ? { // 移动端隐藏平均线
               silent: true,
               lineStyle: {
                 color: '#909399',
@@ -337,11 +351,11 @@ export default {
             } : null
           }
         ],
-        // 添加数据概览和备注说明
-        graphic: [
+        // 移动端隐藏数据统计面板
+        graphic: mobile ? [] : [
           {
             type: 'group',
-            right: 450,
+            right: 400,
             top: 60,
             children: [
               {
@@ -395,11 +409,20 @@ export default {
                   fontSize: 10,
                   fill: '#909399'
                 }
-              },
-            
+              }
             ]
           }
-        ]
+        ],
+        // 添加数据缩放组件，支持手势缩放
+        dataZoom: mobile && dates.length > 10 ? [
+          {
+            type: 'inside',
+            start: Math.max(0, ((dates.length - 10) / dates.length) * 100),
+            end: 100,
+            zoomOnMouseWheel: 'ctrl',
+            moveOnMouseMove: true
+          }
+        ] : []
       }
       
       // 合并用户自定义配置
@@ -420,9 +443,17 @@ export default {
     }
     
     const handleResize = () => {
-      if (chart) {
-        chart.resize()
+      // 使用防抖避免频繁resize
+      if (resizeTimer) {
+        clearTimeout(resizeTimer)
       }
+      resizeTimer = setTimeout(() => {
+        if (chart) {
+          chart.resize()
+          // 重新更新图表配置以适应新的屏幕尺寸
+          updateChart()
+        }
+      }, 100)
     }
     
     // 监听数据变化
@@ -434,6 +465,9 @@ export default {
       if (chart) {
         chart.dispose()
       }
+      if (resizeTimer) {
+        clearTimeout(resizeTimer)
+      }
       window.removeEventListener('resize', handleResize)
     })
     
@@ -443,6 +477,11 @@ export default {
 </script>
 
 <style scoped>
+.weight-chart-container {
+  position: relative;
+  overflow: hidden;
+}
+
 .chart-loading {
   display: flex;
   align-items: center;
@@ -456,5 +495,12 @@ export default {
 .loading-text {
   color: #666;
   font-size: 14px;
+}
+
+/* 移动端样式优化 */
+@media (max-width: 768px) {
+  .weight-chart-container {
+    touch-action: pan-x pan-y;
+  }
 }
 </style>
