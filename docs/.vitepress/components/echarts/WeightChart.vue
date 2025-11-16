@@ -403,7 +403,7 @@ export default {
               {
                 type: 'text',
                 style: {
-                  text: `记录: ${dates.length}天`,
+                  text: `记录: ${dates.length}次`,
                   x: 10,
                   y: 52,
                   fontSize: 10,
