@@ -35,7 +35,12 @@ import WeightChart from '../components/echarts/WeightChart.vue'
 // 引入自定义的echarts组件
 import CatPic from '../components/echarts/CatPic.vue'
 
+<<<<<<< Updated upstream
 import CatReminderCalendar from '../components/echarts/CatReminderCalendar.vue'
+=======
+// 引入自定义的echarts组件:TravelMap
+import TravelMap from '../components/echarts/TravelMap.vue'
+>>>>>>> Stashed changes
 
 import codeblocksFold from 'vitepress-plugin-codeblocks-fold'; // import method
 import 'vitepress-plugin-codeblocks-fold/style/index.css'; // import style
@@ -63,8 +68,13 @@ export default {
     app.component('Timer', Timer);
     app.component('LineChart', LineChart);
     app.component('WeightChart', WeightChart);
+<<<<<<< Updated upstream
      app.component('CatPic', CatPic);
      app.component('CatReminderCalendar', CatReminderCalendar);
+=======
+    app.component('CatPic', CatPic);
+    app.component('TravelMap', TravelMap);
+>>>>>>> Stashed changes
 
   },
 
