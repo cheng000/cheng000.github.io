@@ -26,7 +26,8 @@ import 'vitepress-copy-helper/style.css'
 import EncryptedContent from '../components/encrypt/EncryptedContent.vue'
 
 // 引入自定义的计时组件
-import Timer from '../components/timer/Timer.vue'
+import MeetTimer from '../components/timer/MeetTimer.vue'
+import LoveTimer from '../components/timer/LoveTimer.vue'
 
 // 引入自定义的echarts组件
 import LineChart from '../components/echarts/LineChart.vue'
@@ -61,7 +62,8 @@ export default {
 
     app.component('C', CopyButton);
     app.component('EncryptedContent', EncryptedContent);
-    app.component('Timer', Timer);
+    app.component('MeetTimer', MeetTimer);
+    app.component('LoveTimer', LoveTimer);
     app.component('LineChart', LineChart);
     app.component('WeightChart', WeightChart);
     app.component('CatPic', CatPic);

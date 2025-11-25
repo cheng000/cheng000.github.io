@@ -34,6 +34,6 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <p style="font-size: 1.2em; font-weight: bold;">👨❤️👩 {{ timeElapsed }}</p>
+    <p style="font-size: 1.2em; font-weight: bold;">👨 👋相遇 👩 {{ timeElapsed }}</p>
   </div>
 </template>
