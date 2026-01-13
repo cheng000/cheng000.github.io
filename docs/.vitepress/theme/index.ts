@@ -40,6 +40,9 @@ import CatPic from '../components/echarts/CatPic.vue'
 // 引入自定义的echarts组件:TravelMap
 import TravelMap from '../components/echarts/TravelMap.vue'
 
+// 引入自定义的组件:CatNeuterReminder
+import CatNeuterReminder from '../components/pet/cat/CatNeuterReminder.vue'
+
 import codeblocksFold from 'vitepress-plugin-codeblocks-fold'; // import method
 import 'vitepress-plugin-codeblocks-fold/style/index.css'; // import style
 
@@ -70,6 +73,7 @@ export default {
     app.component('WeightChart', WeightChart);
     app.component('CatPic', CatPic);
     app.component('TravelMap', TravelMap);
+    app.component('CatNeuterReminder', CatNeuterReminder);
 
   },
 
