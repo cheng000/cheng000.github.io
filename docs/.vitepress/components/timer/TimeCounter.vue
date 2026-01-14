@@ -9,7 +9,12 @@ const props = defineProps({
     required: true
   },
   // 显示的文字标签
-  label: {
+  label1: {
+    type: String,
+    default: '过去了'
+  },
+  // 显示的文字标签
+  label2: {
     type: String,
     default: '过去了'
   },
@@ -113,6 +118,7 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <p style="font-size: 1.2em; font-weight: bold;">{{ label }} {{ timeElapsed }}</p>
+    <p style="font-size: 1.2em; font-weight: bold;">{{ label2 }} {{ timeElapsed }}</p>
+    <p style="font-size: 0.8em; font-weight: bold;">（{{ label1 }} {{ startTime }}）</p>
   </div>
 </template>

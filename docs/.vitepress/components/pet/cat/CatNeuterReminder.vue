@@ -1,6 +1,6 @@
 <template>
   <div class="cat-reminder">
-    <h2>🐱 绝育手术可爱提醒</h2>
+    <h2>菠萝包绝育手术提醒</h2>
     <p class="subtitle">给 <strong>{{ name }}</strong>（{{ age }}个月 · {{ weight }}斤 {{ breed }}）的小本本</p>
 
     <section>
