@@ -1,10 +1,10 @@
 import {
   __commonJS
-} from "./chunk-ZS7NZCD4.js";
+} from "./chunk-34Z2WVG2.js";
 
-// node_modules/busuanzi.pure.js/busuanzi.pure.js
+// ../../../../node_modules/busuanzi.pure.js/busuanzi.pure.js
 var require_busuanzi_pure = __commonJS({
-  "node_modules/busuanzi.pure.js/busuanzi.pure.js"(exports, module) {
+  "../../../../node_modules/busuanzi.pure.js/busuanzi.pure.js"(exports, module) {
     var bszCaller;
     var bszTag;
     var scriptTag;
@@ -91,9 +91,9 @@ var require_busuanzi_pure = __commonJS({
   }
 });
 
-// node_modules/busuanzi.pure.js/index.js
+// ../../../../node_modules/busuanzi.pure.js/index.js
 var require_busuanzi_pure2 = __commonJS({
-  "node_modules/busuanzi.pure.js/index.js"(exports, module) {
+  "../../../../node_modules/busuanzi.pure.js/index.js"(exports, module) {
     module.exports = require_busuanzi_pure();
   }
 });
