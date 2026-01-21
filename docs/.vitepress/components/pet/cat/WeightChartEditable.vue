@@ -122,7 +122,8 @@ const props = defineProps({
   // API 基础地址
   apiBase: {
     type: String,
-    default: 'http://localhost:8091'
+    // default: 'http://localhost:8091'
+    default: 'https://api.blazing3service.site'
   },
   // 图表标题
   title: {
