@@ -16,9 +16,9 @@ import {
   unref,
   withCtx
 } from "./chunk-OKTR4WF2.js";
-import "./chunk-ZS7NZCD4.js";
+import "./chunk-34Z2WVG2.js";
 
-// node_modules/vitepress-plugin-back-to-top/dist/vitepress-plugin-back-to-top.js
+// ../../../../node_modules/vitepress-plugin-back-to-top/dist/vitepress-plugin-back-to-top.js
 var E = (e) => (pushScopeId("data-v-09295527"), e = e(), popScopeId(), e);
 var I = E(() => createBaseVNode("svg", {
   class: "icon-top",

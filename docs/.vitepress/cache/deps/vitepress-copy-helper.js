@@ -8,9 +8,9 @@ import {
   unref,
   useSlots
 } from "./chunk-OKTR4WF2.js";
-import "./chunk-ZS7NZCD4.js";
+import "./chunk-34Z2WVG2.js";
 
-// node_modules/vitepress-copy-helper/dist/vitepress-copy-helper.js
+// ../../../../node_modules/vitepress-copy-helper/dist/vitepress-copy-helper.js
 async function L(l) {
   try {
     return navigator.clipboard.writeText(l);

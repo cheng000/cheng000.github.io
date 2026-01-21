@@ -55,14 +55,22 @@
               :key="record.id || record.recordDate"
               class="record-item"
             >
-              <div class="record-info">
-                <span class="record-date">{{ formatDate(record.recordDate) }}</span>
-                <span class="record-weight">{{ record.weight }}{{ unit }}</span>
-                <span class="record-note" v-if="record.note">{{ record.note }}</span>
+              <div class="record-left">
+                <div class="record-date-box">
+                  <span class="record-day">{{ formatDay(record.recordDate) }}</span>
+                  <span class="record-month-year">{{ formatMonthYear(record.recordDate) }}</span>
+                </div>
+                <div class="record-weight-box">
+                  <span class="record-weight-value">{{ record.weight }}</span>
+                  <span class="record-weight-unit">{{ unit }}</span>
+                </div>
               </div>
-              <div class="record-actions">
-                <button class="edit-btn" @click="editRecord(record)" title="编辑">✎</button>
-                <button class="delete-btn" @click="deleteRecord(record)" title="删除">🗑</button>
+              <div class="record-right">
+                <span class="record-note" v-if="record.note">{{ record.note }}</span>
+                <div class="record-actions">
+                  <button class="edit-btn" @click="editRecord(record)">✎</button>
+                  <button class="delete-btn" @click="deleteRecord(record)">🗑</button>
+                </div>
               </div>
             </div>
             <div v-if="records.length === 0" class="empty-state">
@@ -185,10 +193,10 @@ const newRecord = ref({
 // 编辑中的记录
 const editingRecord = ref(null)
 
-// 计算属性：排序后的记录
+// 计算属性：排序后的记录（倒序）
 const sortedRecords = computed(() => {
   return [...records.value].sort((a, b) =>
-    new Date(a.recordDate) - new Date(b.recordDate)
+    new Date(b.recordDate) - new Date(a.recordDate)
   )
 })
 
@@ -208,6 +216,25 @@ const chartData = computed(() => {
 const formatDate = (dateStr) => {
   const date = new Date(dateStr)
   return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
+}
+
+// 格式化年份
+const formatYear = (dateStr) => {
+  const date = new Date(dateStr)
+  return date.getFullYear()
+}
+
+// 格式化日
+const formatDay = (dateStr) => {
+  const date = new Date(dateStr)
+  return date.getDate()
+}
+
+// 格式化月年
+const formatMonthYear = (dateStr) => {
+  const date = new Date(dateStr)
+  const month = date.toLocaleDateString('zh-CN', { month: 'short' })
+  return `${date.getFullYear()} ${month}`
 }
 
 // 获取体重记录
@@ -496,32 +523,86 @@ watch(() => props.petName, () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
-  background: #f8f9fa;
-  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
   margin-bottom: 0.5rem;
+  transition: box-shadow 0.2s;
 }
 
-.record-info {
+.record-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-color: #FF6B9D;
+}
+
+.record-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
   flex: 1;
   min-width: 0;
 }
 
-.record-date {
-  font-weight: 500;
+.record-date-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #FF6B9D 0%, #e85a8a 100%);
+  border-radius: 10px;
+  flex-shrink: 0;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.record-day {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.record-month-year {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 1px;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.record-weight-box {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.record-weight-value {
+  font-size: 1.1rem;
+  font-weight: 700;
   color: #333;
 }
 
-.record-weight {
-  margin-left: 0.5rem;
-  color: #FF6B9D;
-  font-weight: 600;
+.record-weight-unit {
+  font-size: 0.75rem;
+  color: #999;
+  font-weight: 500;
+}
+
+.record-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .record-note {
-  display: block;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: #888;
+  max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -529,22 +610,31 @@ watch(() => props.petName, () => {
 
 .record-actions {
   display: flex;
-  gap: 0.25rem;
+  gap: 0.35rem;
 }
 
 .edit-btn,
 .delete-btn {
-  background: none;
+  background: #f5f5f5;
   border: none;
   cursor: pointer;
-  padding: 0.25rem;
-  opacity: 0.6;
-  transition: opacity 0.2s;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: all 0.2s;
 }
 
-.edit-btn:hover,
-.delete-btn:hover {
+.edit-btn:hover {
+  background: #FF6B9D;
   opacity: 1;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background: #e74c3c;
+  opacity: 1;
+  color: #fff;
 }
 
 .empty-state {

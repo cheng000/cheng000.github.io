@@ -125,12 +125,27 @@ export default {
       return { dates, weights, notes }
     }
     
-    const formatDate = (dateStr) => {
+    const formatDate = (dateStr, index, allDates) => {
       try {
         const date = new Date(dateStr)
+        const year = date.getFullYear()
         const month = date.getMonth() + 1
         const day = date.getDate()
-        return `${month}/${day}`
+
+        // 检查是否跨年：与第一个日期年份不同，或与上一个日期年份不同
+        let showYear = false
+        if (index === 0) {
+          // 第一个日期只在有多年数据时显示年份
+          const firstYear = new Date(allDates[0]).getFullYear()
+          const lastYear = new Date(allDates[allDates.length - 1]).getFullYear()
+          showYear = firstYear !== lastYear
+        } else {
+          // 检查与上一个日期是否跨年
+          const prevYear = new Date(allDates[index - 1]).getFullYear()
+          showYear = year !== prevYear
+        }
+
+        return showYear ? `${year}/${month}/${day}` : `${month}/${day}`
       } catch (error) {
         return dateStr
       }
@@ -147,7 +162,7 @@ export default {
       }
       
       // 格式化日期显示
-      const formattedDates = dates.map(formatDate)
+      const formattedDates = dates.map((date, index) => formatDate(date, index, dates))
       
       // 计算统计信息
       const maxWeight = Math.max(...weights)
@@ -351,16 +366,16 @@ export default {
             } : null
           }
         ],
-        // 移动端隐藏数据统计面板
-        graphic: mobile ? [] : [
+        // 数据统计面板（移动端和PC端都显示）
+        graphic: [
           {
             type: 'group',
-            right: 400,
-            top: 60,
+            right: mobile ? 10 : 400,
+            top: mobile ? 40 : 60,
             children: [
               {
                 type: 'rect',
-                shape: { width: 140, height: notes.some(n => n) ? 80 : 50 },
+                shape: { width: mobile ? 100 : 140, height: notes.some(n => n) ? (mobile ? 70 : 80) : (mobile ? 45 : 50) },
                 style: {
                   fill: 'rgba(255,255,255,0.95)',
                   stroke: '#E4E7ED',
@@ -373,10 +388,10 @@ export default {
                 type: 'text',
                 style: {
                   text: '数据统计',
-                  x: 70,
+                  x: mobile ? 50 : 70,
                   y: 5,
                   textAlign: 'center',
-                  fontSize: 12,
+                  fontSize: mobile ? 11 : 12,
                   fontWeight: 'bold'
                 }
               },
@@ -384,9 +399,9 @@ export default {
                 type: 'text',
                 style: {
                   text: `最高: ${maxWeight.toFixed(1)}${props.unit}`,
-                  x: 10,
-                  y: 22,
-                  fontSize: 10,
+                  x: mobile ? 8 : 10,
+                  y: mobile ? 20 : 22,
+                  fontSize: mobile ? 9 : 10,
                   fill: '#67C23A'
                 }
               },
@@ -394,9 +409,9 @@ export default {
                 type: 'text',
                 style: {
                   text: `最低: ${minWeight.toFixed(1)}${props.unit}`,
-                  x: 10,
-                  y: 37,
-                  fontSize: 10,
+                  x: mobile ? 8 : 10,
+                  y: mobile ? 34 : 37,
+                  fontSize: mobile ? 9 : 10,
                   fill: '#F56C6C'
                 }
               },
@@ -404,9 +419,9 @@ export default {
                 type: 'text',
                 style: {
                   text: `记录: ${dates.length}次`,
-                  x: 10,
-                  y: 52,
-                  fontSize: 10,
+                  x: mobile ? 8 : 10,
+                  y: mobile ? 48 : 52,
+                  fontSize: mobile ? 9 : 10,
                   fill: '#909399'
                 }
               }

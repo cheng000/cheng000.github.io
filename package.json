@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@iminu/vitepress-plugin-auto-sidebar": "^1.0.3",
+    "ali-oss": "^6.23.0",
     "bcryptjs": "^3.0.2",
     "busuanzi.pure.js": "^1.0.3",
     "medium-zoom": "^1.1.0",
