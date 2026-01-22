@@ -476,7 +476,6 @@ const preloadImages = () => {
     const src = img.imageUrl || img
     if (!imageCache.value.has(src)) {
       const image = new Image()
-      image.crossOrigin = 'anonymous'
       image.onload = () => {
         imageCache.value.set(src, src)
         loadedImages.value.add(index)
