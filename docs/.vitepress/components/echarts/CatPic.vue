@@ -215,8 +215,8 @@ const props = defineProps({
   },
   apiBase: {
     type: String,
-    default: 'http://localhost:8091'
-    // default: 'https://api.blazing3service.site'
+    // default: 'http://localhost:8091'
+    default: 'https://api.blazing3service.site'
   },
   autoPlay: {
     type: Boolean,
