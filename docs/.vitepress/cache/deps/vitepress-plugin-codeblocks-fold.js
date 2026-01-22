@@ -3,7 +3,7 @@ import {
   onMounted,
   watch
 } from "./chunk-OKTR4WF2.js";
-import "./chunk-34Z2WVG2.js";
+import "./chunk-3EJPJMEH.js";
 
 // node_modules/vitepress-plugin-codeblocks-fold/lib/index.js
 var themeChangeObserve = null;

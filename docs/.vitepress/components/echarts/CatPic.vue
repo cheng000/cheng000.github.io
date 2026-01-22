@@ -215,7 +215,8 @@ const props = defineProps({
   },
   apiBase: {
     type: String,
-    default: 'https://api.blazing3service.site'
+    default: 'http://localhost:8091'
+    // default: 'https://api.blazing3service.site'
   },
   autoPlay: {
     type: Boolean,
@@ -298,7 +299,8 @@ const initOssClient = async () => {
       accessKeySecret: signature.accessKeySecret,
       stsToken: signature.securityToken,
       bucket: signature.bucket,
-      secure: true
+      secure: true,
+      timeout: 120000 // 2分钟超时
     })
 
     return signature

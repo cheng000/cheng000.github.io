@@ -1,6 +1,6 @@
-import "./chunk-34Z2WVG2.js";
+import "./chunk-3EJPJMEH.js";
 
-// ../../../../node_modules/medium-zoom/dist/medium-zoom.esm.js
+// node_modules/medium-zoom/dist/medium-zoom.esm.js
 var _extends = Object.assign || function(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];
