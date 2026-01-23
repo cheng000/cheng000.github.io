@@ -189,6 +189,32 @@
       </div>
     </div>
 
+    <!-- 图片操作工具栏 -->
+    <div class="image-toolbar" v-if="imageList.length > 0 && imageList[currentIndex]?.id">
+      <div class="toolbar-left">
+        <span class="current-image-info">
+          {{ imageList[currentIndex]?.petName || '未分类' }}
+          <span v-if="imageList[currentIndex]?.description" class="description">
+            - {{ imageList[currentIndex]?.description }}
+          </span>
+        </span>
+      </div>
+      <div class="toolbar-right">
+        <button class="toolbar-btn edit-btn" @click="openEditModal(imageList[currentIndex])">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/>
+          </svg>
+          编辑
+        </button>
+        <button class="toolbar-btn delete-btn" @click="confirmDeleteImage(imageList[currentIndex])">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
+          </svg>
+          删除
+        </button>
+      </div>
+    </div>
+
     <!-- 操作按钮 -->
     <div class="action-buttons">
       <button class="toggle-upload-btn" @click="toggleUploadPanel">
@@ -199,6 +225,67 @@
       </button>
       <span class="image-counter" v-if="showCounter">共 {{ imageList.length }} 张</span>
     </div>
+
+    <!-- 编辑图片弹窗 -->
+    <transition name="modal-fade">
+      <div v-if="showEditModal" class="modal-overlay" @click.self="closeEditModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>编辑图片信息</h3>
+            <button class="modal-close-btn" @click="closeEditModal">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>宠物名称</label>
+              <select v-model="editForm.petName" class="form-input">
+                <option value="">未分类</option>
+                <option value="菠萝包">菠萝包</option>
+                <option value="咪咪">咪咪</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>图片描述</label>
+              <textarea
+                v-model="editForm.description"
+                class="form-input"
+                placeholder="添加描述..."
+                rows="3"
+              ></textarea>
+            </div>
+            <div class="image-preview" v-if="editForm.imageUrl">
+              <img :src="editForm.imageUrl" alt="预览" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn modal-btn-cancel" @click="closeEditModal">取消</button>
+            <button class="modal-btn modal-btn-confirm" @click="saveImageEdit" :disabled="isSaving">
+              {{ isSaving ? '保存中...' : '保存' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- 删除确认弹窗 -->
+    <transition name="modal-fade">
+      <div v-if="showDeleteConfirm" class="modal-overlay" @click.self="closeDeleteConfirm">
+        <div class="modal-content modal-small">
+          <div class="modal-header">
+            <h3>确认删除</h3>
+            <button class="modal-close-btn" @click="closeDeleteConfirm">×</button>
+          </div>
+          <div class="modal-body">
+            <p>确定要删除这张图片吗？此操作无法撤销。</p>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn modal-btn-cancel" @click="closeDeleteConfirm">取消</button>
+            <button class="modal-btn modal-btn-danger" @click="deleteImage" :disabled="isDeleting">
+              {{ isDeleting ? '删除中...' : '确认删除' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -215,8 +302,8 @@ const props = defineProps({
   },
   apiBase: {
     type: String,
-    // default: 'http://localhost:8091'
-    default: 'https://api.blazing3service.site'
+    default: 'http://localhost:8091'
+    // default: 'https://api.blazing3service.site'
   },
   autoPlay: {
     type: Boolean,
@@ -256,6 +343,19 @@ const isDragOver = ref(false)
 
 // 图片列表
 const imageList = ref([])
+
+// 编辑相关状态
+const showEditModal = ref(false)
+const showDeleteConfirm = ref(false)
+const isSaving = ref(false)
+const isDeleting = ref(false)
+const editForm = ref({
+  id: null,
+  petName: '',
+  description: '',
+  imageUrl: ''
+})
+const imageToDelete = ref(null)
 
 // OSS客户端
 let ossClient = null
@@ -462,6 +562,122 @@ const loadImagesFromServer = async () => {
     // 如果API调用失败，使用传入的 list
     imageList.value = props.list
     preloadImages()
+  }
+}
+
+// 打开编辑弹窗
+const openEditModal = (image) => {
+  editForm.value = {
+    id: image.id,
+    petName: image.petName || '',
+    description: image.description || '',
+    imageUrl: image.imageUrl
+  }
+  showEditModal.value = true
+}
+
+// 关闭编辑弹窗
+const closeEditModal = () => {
+  showEditModal.value = false
+  editForm.value = {
+    id: null,
+    petName: '',
+    description: '',
+    imageUrl: ''
+  }
+}
+
+// 保存图片编辑
+const saveImageEdit = async () => {
+  if (!editForm.value.id) return
+
+  isSaving.value = true
+  try {
+    const response = await fetch(`${props.apiBase}/pet/cat/image/${editForm.value.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        petName: editForm.value.petName || null,
+        description: editForm.value.description
+      })
+    })
+
+    const result = await response.json()
+
+    if (!result.success) {
+      throw new Error(result.message || '更新失败')
+    }
+
+    // 更新本地列表
+    const index = imageList.value.findIndex(img => img.id === editForm.value.id)
+    if (index !== -1) {
+      imageList.value[index] = {
+        ...imageList.value[index],
+        petName: editForm.value.petName,
+        description: editForm.value.description
+      }
+    }
+
+    closeEditModal()
+  } catch (error) {
+    console.error('更新图片信息失败:', error)
+    alert('更新失败: ' + error.message)
+  } finally {
+    isSaving.value = false
+  }
+}
+
+// 确认删除图片
+const confirmDeleteImage = (image) => {
+  imageToDelete.value = image
+  showDeleteConfirm.value = true
+}
+
+// 关闭删除确认
+const closeDeleteConfirm = () => {
+  showDeleteConfirm.value = false
+  imageToDelete.value = null
+}
+
+// 删除图片
+const deleteImage = async () => {
+  if (!imageToDelete.value?.id) return
+
+  isDeleting.value = true
+  try {
+    const response = await fetch(`${props.apiBase}/pet/cat/image/${imageToDelete.value.id}`, {
+      method: 'DELETE'
+    })
+
+    const result = await response.json()
+
+    if (!result.success) {
+      throw new Error(result.message || '删除失败')
+    }
+
+    // 从本地列表中移除
+    const index = imageList.value.findIndex(img => img.id === imageToDelete.value.id)
+    if (index !== -1) {
+      imageList.value.splice(index, 1)
+      // 清理缓存
+      const cacheKey = imageToDelete.value.imageUrl
+      imageCache.value.delete(cacheKey)
+      loadedImages.value.delete(index)
+    }
+
+    // 调整当前索引
+    if (currentIndex.value >= imageList.value.length && imageList.value.length > 0) {
+      currentIndex.value = imageList.value.length - 1
+    }
+
+    closeDeleteConfirm()
+  } catch (error) {
+    console.error('删除图片失败:', error)
+    alert('删除失败: ' + error.message)
+  } finally {
+    isDeleting.value = false
   }
 }
 
@@ -1158,5 +1374,298 @@ onBeforeUnmount(() => {
   .nav-button.next {
     right: 16px;
   }
+
+  .image-toolbar {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .toolbar-left {
+    width: 100%;
+    text-align: center;
+  }
+
+  .current-image-info {
+    font-size: 0.85rem;
+  }
+
+  .toolbar-right {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  .toolbar-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.6rem 1rem;
+  }
+
+  .toolbar-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* 图片操作工具栏 */
+.image-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem auto 0;
+  max-width: 800px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.toolbar-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.current-image-info {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.current-image-info .description {
+  color: #888;
+  font-weight: 400;
+  margin-left: 0.5rem;
+}
+
+.toolbar-right {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.875rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.toolbar-btn svg {
+  flex-shrink: 0;
+}
+
+.toolbar-btn.edit-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.toolbar-btn.edit-btn:hover {
+  background: linear-gradient(135deg, #43A047, #388E3C);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.toolbar-btn.delete-btn {
+  background: linear-gradient(135deg, #F44336, #e53935);
+  color: white;
+}
+
+.toolbar-btn.delete-btn:hover {
+  background: linear-gradient(135deg, #E53935, #D32F2F);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+/* 弹窗样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content.modal-small {
+  max-width: 400px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  background: #f8f9fa;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: #e9ecef;
+  color: #333;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-body .form-group {
+  margin-bottom: 1.25rem;
+}
+
+.modal-body .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.modal-body .form-input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+.modal-body .form-input:focus {
+  outline: none;
+  border-color: #FF6B9D;
+}
+
+.image-preview {
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #eee;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #eee;
+  background: #f8f9fa;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-btn-cancel {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.modal-btn-cancel:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.modal-btn-confirm {
+  background: #FF6B9D;
+  color: white;
+}
+
+.modal-btn-confirm:hover:not(:disabled) {
+  background: #e85a8a;
+}
+
+.modal-btn-danger {
+  background: #F44336;
+  color: white;
+}
+
+.modal-btn-danger:hover:not(:disabled) {
+  background: #d32f2f;
+}
+
+/* 弹窗动画 */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+.modal-fade-enter-from .modal-content,
+.modal-fade-leave-to .modal-content {
+  transform: scale(0.9) translateY(-20px);
 }
 </style>

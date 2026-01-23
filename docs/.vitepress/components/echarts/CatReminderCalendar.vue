@@ -279,8 +279,8 @@
 import { ref, computed, onMounted } from 'vue'
 
 // API 基础地址
-// const apiBaseUrl = ref('http://localhost:8091/pet')
-const apiBaseUrl = ref('https://api.blazing3service.site/pet')
+const apiBaseUrl = ref('http://localhost:8091/pet')
+// const apiBaseUrl = ref('https://api.blazing3service.site/pet')
 
 // 日历相关
 const currentYear = ref(new Date().getFullYear())
@@ -745,17 +745,24 @@ onMounted(() => {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   padding: 4px;
+  align-items: stretch;
 }
 
 .btn-view {
   border: none;
-  padding: 6px 12px;
+  padding: 10px 16px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   background-color: transparent;
   color: white;
   font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  min-height: 40px;
+  height: auto;
 }
 
 .btn-view:hover {
@@ -1329,12 +1336,28 @@ onMounted(() => {
 
   .header-controls {
     width: 100%;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .view-switcher {
+    flex: 0 1 auto;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .btn-view {
     flex: 1;
-    justify-content: center;
+    padding: 10px 12px;
+    font-size: 0.85em;
+    min-height: 44px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    flex: 1;
+    min-width: 80px;
+    white-space: nowrap;
   }
 
   .calendar-day {
