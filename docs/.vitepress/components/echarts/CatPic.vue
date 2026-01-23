@@ -240,7 +240,7 @@
               <select v-model="editForm.petName" class="form-input">
                 <option value="">未分类</option>
                 <option value="菠萝包">菠萝包</option>
-                <option value="咪咪">咪咪</option>
+                <!-- <option value="咪咪">咪咪</option> -->
               </select>
             </div>
             <div class="form-group">
