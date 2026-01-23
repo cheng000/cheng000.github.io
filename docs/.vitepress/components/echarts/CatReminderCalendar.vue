@@ -279,8 +279,8 @@
 import { ref, computed, onMounted } from 'vue'
 
 // API 基础地址
-const apiBaseUrl = ref('http://localhost:8091/pet')
-// const apiBaseUrl = ref('https://api.blazing3service.site/pet')
+// const apiBaseUrl = ref('http://localhost:8091/pet')
+const apiBaseUrl = ref('https://api.blazing3service.site/pet')
 
 // 日历相关
 const currentYear = ref(new Date().getFullYear())
