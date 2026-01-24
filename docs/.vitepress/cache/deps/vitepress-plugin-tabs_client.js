@@ -5,8 +5,8 @@ import {
 import "./chunk-3EJPJMEH.js";
 
 // node_modules/vitepress-plugin-tabs/src/client/index.ts
-import PluginTabs from "/Users/mikec/Documents/project/blog-vitepress/cheng000.github.io/node_modules/vitepress-plugin-tabs/src/client/PluginTabs.vue";
-import PluginTabsTab from "/Users/mikec/Documents/project/blog-vitepress/cheng000.github.io/node_modules/vitepress-plugin-tabs/src/client/PluginTabsTab.vue";
+import PluginTabs from "/Users/mikec/Documents/01_Document/01_Blog/cheng000.github.io/node_modules/vitepress-plugin-tabs/src/client/PluginTabs.vue";
+import PluginTabsTab from "/Users/mikec/Documents/01_Document/01_Blog/cheng000.github.io/node_modules/vitepress-plugin-tabs/src/client/PluginTabsTab.vue";
 
 // node_modules/vitepress-plugin-tabs/src/client/useTabsSelectedState.ts
 var injectionKey = "vitepress:tabSharedState";

@@ -132,6 +132,8 @@
               'hidden': !isVisibleSlide(index)
             }"
             @click="goToImage(index)"
+            @mouseenter="showMagnifier = index === currentIndex"
+            @mouseleave="showMagnifier = false"
           >
             <div class="slide-content">
               <div class="glass-overlay"></div>
@@ -147,6 +149,18 @@
                    class="loading-overlay">
                 <div class="loading-spinner"></div>
               </div>
+              <!-- 放大镜按钮 -->
+              <transition name="magnifier-fade">
+                <div v-if="index === currentIndex && showMagnifier && loadedImages.has(index)"
+                     class="magnifier-btn"
+                     @click.stop="openImageViewer(index)">
+                  <svg viewBox="0 0 24 24" width="24" height="24">
+                    <circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="11" cy="11" r="3" fill="currentColor"/>
+                  </svg>
+                </div>
+              </transition>
             </div>
           </div>
         </div>
@@ -223,6 +237,15 @@
       <button class="refresh-btn" @click="loadImagesFromServer">
         🔄 刷新
       </button>
+      <button class="list-view-btn" @click="openListView">
+        <svg viewBox="0 0 24 24" width="18" height="18">
+          <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+          <rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+          <rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+          <rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+        </svg>
+        列表
+      </button>
       <span class="image-counter" v-if="showCounter">共 {{ imageList.length }} 张</span>
     </div>
 
@@ -282,6 +305,96 @@
             <button class="modal-btn modal-btn-danger" @click="deleteImage" :disabled="isDeleting">
               {{ isDeleting ? '删除中...' : '确认删除' }}
             </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- 图片查看器（全屏预览） -->
+    <transition name="viewer-fade">
+      <div v-if="showImageViewer" class="image-viewer-overlay" @click="closeImageViewer">
+        <div class="image-viewer-container" @click.stop>
+          <!-- 关闭按钮 -->
+          <button class="viewer-close-btn" @click="closeImageViewer">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+            </svg>
+          </button>
+
+          <!-- 导航按钮 -->
+          <button v-if="imageList.length > 1" class="viewer-nav-btn viewer-prev" @click="viewerPrev">
+            <svg viewBox="0 0 24 24" width="32" height="32">
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
+            </svg>
+          </button>
+          <button v-if="imageList.length > 1" class="viewer-nav-btn viewer-next" @click="viewerNext">
+            <svg viewBox="0 0 24 24" width="32" height="32">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"/>
+            </svg>
+          </button>
+
+          <!-- 图片展示 -->
+          <div class="viewer-image-wrapper">
+            <img
+              :src="imageList[viewerImageIndex]?.imageUrl || imageList[viewerImageIndex]"
+              :alt="`猫咪图片 ${viewerImageIndex + 1}`"
+              class="viewer-image"
+            />
+            <!-- 图片信息 -->
+            <div class="viewer-image-info">
+              <span v-if="imageList[viewerImageIndex]?.petName" class="viewer-pet-name">
+                {{ imageList[viewerImageIndex]?.petName }}
+              </span>
+              <span v-if="imageList[viewerImageIndex]?.description" class="viewer-description">
+                {{ imageList[viewerImageIndex]?.description }}
+              </span>
+              <span class="viewer-counter">{{ viewerImageIndex + 1 }} / {{ imageList.length }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- 列表视图 -->
+    <transition name="list-slide">
+      <div v-if="showListView" class="list-view-overlay">
+        <div class="list-view-container">
+          <!-- 列表头部 -->
+          <div class="list-view-header">
+            <h2>照片列表</h2>
+            <button class="list-view-close-btn" @click="closeListView">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- iOS风格网格列表 -->
+          <div class="image-grid-list">
+            <div
+              v-for="(image, index) in imageList"
+              :key="image.id || index"
+              class="grid-item"
+              @click="openImageViewer(index)"
+            >
+              <div class="grid-item-image">
+                <img
+                  :src="image.imageUrl || image"
+                  :alt="`猫咪图片 ${index + 1}`"
+                  loading="lazy"
+                />
+                <div class="grid-item-overlay">
+                  <svg viewBox="0 0 24 24" width="24" height="24">
+                    <circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="grid-item-info">
+                <span class="grid-item-pet">{{ image.petName || '未分类' }}</span>
+                <span class="grid-item-desc">{{ image.description || '暂无描述' }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -356,6 +469,14 @@ const editForm = ref({
   imageUrl: ''
 })
 const imageToDelete = ref(null)
+
+// 放大镜相关状态
+const showMagnifier = ref(false)
+const showImageViewer = ref(false)
+const viewerImageIndex = ref(0)
+
+// 列表视图相关状态
+const showListView = ref(false)
 
 // OSS客户端
 let ossClient = null
@@ -688,18 +809,26 @@ const toggleUploadPanel = () => {
 
 // 轮播相关方法
 const preloadImages = () => {
-  imageList.value.forEach((img, index) => {
-    const src = img.imageUrl || img
-    if (!imageCache.value.has(src)) {
-      const image = new Image()
-      image.onload = () => {
-        imageCache.value.set(src, src)
+  // 只预加载当前、上一张和下一张
+  const indicesToLoad = [currentIndex.value, prevIndex.value, nextIndex.value]
+
+  indicesToLoad.forEach(index => {
+    if (index >= 0 && index < imageList.value.length) {
+      const img = imageList.value[index]
+      const src = img.imageUrl || img
+      if (!imageCache.value.has(src)) {
+        const image = new Image()
+        image.onload = () => {
+          imageCache.value.set(src, src)
+          loadedImages.value.add(index)
+        }
+        image.onerror = () => {
+          imageCache.value.set(src, src)
+        }
+        image.src = src
+      } else if (imageCache.value.has(src)) {
         loadedImages.value.add(index)
       }
-      image.onerror = () => {
-        imageCache.value.set(src, src)
-      }
-      image.src = src
     }
   })
 }
@@ -709,19 +838,27 @@ const getCachedImageSrc = (imageOrUrl) => {
   return imageCache.value.get(src) || src
 }
 
+// 当索引变化时预加载
+const updatePreload = () => {
+  preloadImages()
+}
+
 const nextImage = () => {
   currentIndex.value = (currentIndex.value + 1) % imageList.value.length
+  updatePreload()
 }
 
 const prevImage = () => {
   currentIndex.value = currentIndex.value === 0
     ? imageList.value.length - 1
     : currentIndex.value - 1
+  updatePreload()
 }
 
 const goToImage = (index) => {
   if (index !== currentIndex.value) {
     currentIndex.value = index
+    updatePreload()
   }
 }
 
@@ -771,6 +908,45 @@ const onTouchEnd = () => {
         startAutoPlay()
       }
     }, 2000)
+  }
+}
+
+// 放大镜和图片查看器相关方法
+const openImageViewer = (index) => {
+  viewerImageIndex.value = index
+  showImageViewer.value = true
+  pauseAutoPlay()
+}
+
+const closeImageViewer = () => {
+  showImageViewer.value = false
+  // 同步轮播索引
+  currentIndex.value = viewerImageIndex.value
+  if (props.autoPlay) {
+    startAutoPlay()
+  }
+}
+
+const viewerPrev = () => {
+  viewerImageIndex.value = viewerImageIndex.value === 0
+    ? imageList.value.length - 1
+    : viewerImageIndex.value - 1
+}
+
+const viewerNext = () => {
+  viewerImageIndex.value = (viewerImageIndex.value + 1) % imageList.value.length
+}
+
+// 列表视图相关方法
+const openListView = () => {
+  showListView.value = true
+  pauseAutoPlay()
+}
+
+const closeListView = () => {
+  showListView.value = false
+  if (props.autoPlay) {
+    startAutoPlay()
   }
 }
 
@@ -1667,5 +1843,439 @@ onBeforeUnmount(() => {
 .modal-fade-enter-from .modal-content,
 .modal-fade-leave-to .modal-content {
   transform: scale(0.9) translateY(-20px);
+}
+
+/* ========== 新增样式：放大镜按钮 ========== */
+.magnifier-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.magnifier-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.magnifier-fade-enter-active,
+.magnifier-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.magnifier-fade-enter-from,
+.magnifier-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* ========== 图片查看器样式 ========== */
+.image-viewer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-viewer-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewer-close-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.viewer-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+
+.viewer-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.viewer-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.viewer-prev {
+  left: 24px;
+}
+
+.viewer-next {
+  right: 24px;
+}
+
+.viewer-image-wrapper {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewer-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.viewer-image-info {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.viewer-pet-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.viewer-description {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.viewer-counter {
+  margin-top: 8px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.viewer-fade-enter-active,
+.viewer-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.viewer-fade-enter-from,
+.viewer-fade-leave-to {
+  opacity: 0;
+}
+
+.viewer-fade-enter-from .image-viewer-container,
+.viewer-fade-leave-to .image-viewer-container {
+  transform: scale(0.95);
+}
+
+/* ========== 列表视图样式 ========== */
+.list-view-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.list-view-container {
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 20px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(20px);
+}
+
+.list-view-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.3px;
+}
+
+.list-view-close-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #666;
+}
+
+.list-view-close-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.image-grid-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+/* iOS风格的网格项 */
+.grid-item {
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.grid-item:hover {
+  transform: scale(1.05);
+}
+
+.grid-item:active {
+  transform: scale(0.98);
+}
+
+.grid-item-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.grid-item-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: white;
+}
+
+.grid-item:hover .grid-item-overlay {
+  opacity: 1;
+}
+
+.grid-item-info {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.grid-item-pet {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.grid-item-desc {
+  font-size: 0.75rem;
+  color: #8e8e93;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 列表视图动画 */
+.list-slide-enter-active,
+.list-slide-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.list-slide-enter-from,
+.list-slide-leave-to {
+  opacity: 0;
+}
+
+.list-slide-enter-from .list-view-container,
+.list-slide-leave-to .list-view-container {
+  transform: scale(0.9) translateY(40px);
+}
+
+/* ========== 列表按钮样式 ========== */
+.list-view-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+}
+
+.list-view-btn:hover {
+  background: linear-gradient(135deg, #0066E5 0%, #0047B0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.4);
+}
+
+.list-view-btn svg {
+  flex-shrink: 0;
+}
+
+/* ========== 滚动条样式 ========== */
+.image-grid-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.image-grid-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.image-grid-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.image-grid-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ========== 响应式调整 ========== */
+@media (max-width: 768px) {
+  .image-grid-list {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .list-view-container {
+    max-height: 90vh;
+  }
+
+  .list-view-header {
+    padding: 16px;
+  }
+
+  .list-view-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .viewer-close-btn {
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .viewer-nav-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .viewer-prev {
+    left: 12px;
+  }
+
+  .viewer-next {
+    right: 12px;
+  }
+
+  .viewer-image {
+    max-height: 70vh;
+  }
 }
 </style>
