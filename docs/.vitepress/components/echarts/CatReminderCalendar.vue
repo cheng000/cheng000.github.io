@@ -1,5 +1,61 @@
 <template>
   <ClientOnly>
+    <!-- 全局今日提醒浮层 -->
+    <transition name="global-reminder-slide">
+      <div v-if="shouldShowGlobalReminder" class="global-reminder-container">
+        <div class="global-reminder-card" :class="{ 'expanded': isReminderExpanded }">
+          <!-- 折叠状态 -->
+          <div class="reminder-compact">
+            <div class="reminder-compact-left" @click="toggleReminderExpand">
+              <div class="reminder-icon-bell">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                  <path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                </svg>
+              </div>
+              <div class="reminder-compact-info">
+                <span class="reminder-compact-title">今日提醒</span>
+                <span class="reminder-compact-count">{{ todayReminders.length }} 项待办</span>
+              </div>
+            </div>
+            <div class="reminder-compact-actions">
+              <button class="reminder-toggle-btn" @click="toggleReminderExpand">
+                <svg viewBox="0 0 24 24" width="18" height="18" :class="{ 'rotated': isReminderExpanded }">
+                  <path fill="currentColor" d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                </svg>
+              </button>
+              <button class="reminder-dismiss-btn" @click="dismissGlobalReminder" title="忽略">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 展开内容 -->
+          <transition name="reminder-expand">
+            <div v-show="isReminderExpanded" class="reminder-expanded-content">
+              <div class="reminder-expanded-list">
+                <div
+                  v-for="reminder in todayReminders"
+                  :key="reminder.id"
+                  class="global-reminder-item"
+                  @click.stop="completeReminder(reminder)"
+                >
+                  <span class="global-reminder-icon">{{ getEventIcon(reminder.type) }}</span>
+                  <span class="global-reminder-text">{{ reminder.content }}</span>
+                  <button class="global-reminder-complete">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                      <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </transition>
+        </div>
+      </div>
+    </transition>
+
     <div class="cat-calendar-container">
       <div class="header">
         <h2>菠萝包日历提醒</h2>
@@ -306,6 +362,11 @@ const searchQuery = ref('')
 const filterType = ref('')
 const expandedGroups = ref([])
 
+// 全局提醒状态
+const showGlobalReminder = ref(true)
+const isReminderExpanded = ref(false)
+const dismissedThisSession = ref(false)
+
 // 模态框状态
 const showAddModal = ref(false)
 const showSettingsModal = ref(false)
@@ -355,7 +416,22 @@ const calendarDays = computed(() => {
 
 const todayReminders = computed(() => {
   const today = formatDate(new Date())
-  return reminders.value.filter(r => r.date === today)
+  const filtered = reminders.value.filter(r => r.date === today)
+  console.log('[CatReminder] Today:', today, 'Today reminders:', filtered.length, 'All reminders:', reminders.value.length)
+  return filtered
+})
+
+// 是否显示全局提醒（检查会话状态）
+const shouldShowGlobalReminder = computed(() => {
+  const result = showGlobalReminder.value &&
+         todayReminders.value.length > 0 &&
+         !dismissedThisSession.value
+  console.log('[CatReminder] shouldShowGlobalReminder:', result, {
+    showGlobalReminder: showGlobalReminder.value,
+    todayRemindersCount: todayReminders.value.length,
+    dismissedThisSession: dismissedThisSession.value
+  })
+  return result
 })
 
 const selectedDateStr = computed(() => {
@@ -483,7 +559,8 @@ async function loadData() {
     // 加载提醒列表
     const remindersData = await apiCall('/reminders')
     reminders.value = remindersData.data || []
-    
+    console.log('[CatReminder] Data loaded:', reminders.value.length, 'reminders')
+
     // 加载周期设置
     const intervalsData = await apiCall('/intervals')
     defaultIntervals.value = intervalsData.data || defaultIntervals.value
@@ -680,6 +757,47 @@ function viewReminderDetail(reminder, date) {
   showDateModal.value = true
 }
 
+// 全局提醒相关方法
+function toggleReminderExpand() {
+  isReminderExpanded.value = !isReminderExpanded.value
+}
+
+// 忽略本次提醒（本次会话不再显示）
+function dismissGlobalReminder() {
+  dismissedThisSession.value = true
+  // 使用 sessionStorage，关闭标签页后清除
+  try {
+    sessionStorage.setItem('catReminderDismissed', 'true')
+  } catch (e) {
+    console.warn('SessionStorage not available:', e)
+  }
+}
+
+// 从 sessionStorage 恢复忽略状态
+function loadSessionState() {
+  try {
+    const dismissed = sessionStorage.getItem('catReminderDismissed')
+    console.log('[CatReminder] Session dismissed state:', dismissed)
+    if (dismissed === 'true') {
+      dismissedThisSession.value = true
+      console.log('[CatReminder] Reminder was dismissed, not showing global reminder')
+    }
+  } catch (e) {
+    console.warn('SessionStorage not available:', e)
+  }
+}
+
+// 清除忽略状态（用于调试，可在控制台调用）
+window.clearCatReminderDismiss = function() {
+  try {
+    sessionStorage.removeItem('catReminderDismissed')
+    dismissedThisSession.value = false
+    console.log('[CatReminder] Dismiss state cleared, global reminder will show')
+  } catch (e) {
+    console.warn('Failed to clear dismiss state:', e)
+  }
+}
+
 // 关闭模态框
 function closeModal() {
   showAddModal.value = false
@@ -703,6 +821,7 @@ function closeDateModal() {
 
 // 组件挂载时加载数据
 onMounted(() => {
+  loadSessionState()  // 先加载会话状态
   loadData()
 })
 </script>
@@ -1385,6 +1504,297 @@ onMounted(() => {
 
   .reminder-item-text {
     font-size: 0.95em;
+  }
+}
+
+/* ========== 全局今日提醒浮层 ========== */
+.global-reminder-container {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.global-reminder-card {
+  pointer-events: auto;
+  min-width: 280px;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 4px 8px -2px rgba(0, 0, 0, 0.1),
+    0 12px 24px -4px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.global-reminder-card.expanded {
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 8px 16px -4px rgba(0, 0, 0, 0.12),
+    0 24px 48px -8px rgba(0, 0, 0, 0.16);
+}
+
+/* 折叠状态 */
+.reminder-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  transition: background-color 0.2s ease;
+}
+
+.reminder-compact-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  cursor: pointer;
+  padding: 4px;
+  margin: -4px;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.reminder-compact-left:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.reminder-compact-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reminder-icon-bell {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #FF6B9D 0%, #FF8E53 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.reminder-compact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reminder-compact-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.2px;
+}
+
+.reminder-compact-count {
+  font-size: 13px;
+  color: #8e8e93;
+}
+
+.reminder-toggle-btn {
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  color: #8e8e93;
+}
+
+.reminder-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.reminder-toggle-btn svg {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reminder-toggle-btn svg.rotated {
+  transform: rotate(180deg);
+}
+
+.reminder-dismiss-btn {
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  color: #8e8e93;
+}
+
+.reminder-dismiss-btn:hover {
+  background: rgba(255, 59, 48, 0.1);
+  color: #FF3B30;
+}
+
+.reminder-dismiss-btn:active {
+  transform: scale(0.95);
+}
+
+/* 展开内容 */
+.reminder-expanded-content {
+  border-top: 0.5px solid rgba(0, 0, 0, 0.08);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.reminder-expanded-list {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.global-reminder-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.global-reminder-item:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(1.01);
+}
+
+.global-reminder-item:active {
+  transform: scale(0.98);
+}
+
+.global-reminder-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.global-reminder-text {
+  flex: 1;
+  font-size: 14px;
+  color: #1a1a1a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.global-reminder-complete {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #34C759 0%, #30B550 100%);
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.global-reminder-complete:hover {
+  transform: scale(1.05);
+}
+
+.global-reminder-complete:active {
+  transform: scale(0.95);
+}
+
+/* 动画效果 */
+.global-reminder-slide-enter-active,
+.global-reminder-slide-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.global-reminder-slide-enter-from {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
+}
+
+.global-reminder-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
+}
+
+.reminder-expand-enter-active,
+.reminder-expand-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.reminder-expand-enter-from,
+.reminder-expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+.reminder-expand-enter-to,
+.reminder-expand-leave-from {
+  max-height: 400px;
+  opacity: 1;
+}
+
+/* 移动端响应式 */
+@media (max-width: 768px) {
+  .global-reminder-container {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    transform: none;
+  }
+
+  .global-reminder-card {
+    max-width: none;
+  }
+
+  .global-reminder-slide-enter-from {
+    transform: translateY(-20px);
+  }
+
+  .global-reminder-slide-leave-to {
+    transform: translateY(-20px);
+  }
+
+  .reminder-compact {
+    padding: 10px 14px;
+  }
+
+  .reminder-compact-title {
+    font-size: 14px;
+  }
+
+  .reminder-compact-count {
+    font-size: 12px;
+  }
+
+  .global-reminder-item {
+    padding: 8px 10px;
+  }
+
+  .global-reminder-text {
+    font-size: 13px;
   }
 }
 </style>

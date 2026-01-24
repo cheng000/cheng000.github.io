@@ -1582,6 +1582,34 @@ onBeforeUnmount(() => {
     width: 16px;
     height: 16px;
   }
+
+  .action-buttons {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .toggle-upload-btn,
+  .refresh-btn,
+  .list-view-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    height: auto;
+    line-height: 1.4;
+  }
+
+  .toggle-upload-btn svg,
+  .refresh-btn svg,
+  .list-view-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .image-counter {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
 }
 
 /* 图片操作工具栏 */
