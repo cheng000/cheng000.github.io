@@ -365,7 +365,6 @@ const expandedGroups = ref([])
 // 全局提醒状态
 const showGlobalReminder = ref(true)
 const isReminderExpanded = ref(false)
-const dismissedThisSession = ref(false)
 
 // 模态框状态
 const showAddModal = ref(false)
@@ -421,15 +420,12 @@ const todayReminders = computed(() => {
   return filtered
 })
 
-// 是否显示全局提醒（检查会话状态）
+// 是否显示全局提醒
 const shouldShowGlobalReminder = computed(() => {
-  const result = showGlobalReminder.value &&
-         todayReminders.value.length > 0 &&
-         !dismissedThisSession.value
+  const result = showGlobalReminder.value && todayReminders.value.length > 0
   console.log('[CatReminder] shouldShowGlobalReminder:', result, {
     showGlobalReminder: showGlobalReminder.value,
-    todayRemindersCount: todayReminders.value.length,
-    dismissedThisSession: dismissedThisSession.value
+    todayRemindersCount: todayReminders.value.length
   })
   return result
 })
@@ -762,40 +758,9 @@ function toggleReminderExpand() {
   isReminderExpanded.value = !isReminderExpanded.value
 }
 
-// 忽略本次提醒（本次会话不再显示）
+// 忽略本次提醒（本次浏览期间不再显示）
 function dismissGlobalReminder() {
-  dismissedThisSession.value = true
-  // 使用 sessionStorage，关闭标签页后清除
-  try {
-    sessionStorage.setItem('catReminderDismissed', 'true')
-  } catch (e) {
-    console.warn('SessionStorage not available:', e)
-  }
-}
-
-// 从 sessionStorage 恢复忽略状态
-function loadSessionState() {
-  try {
-    const dismissed = sessionStorage.getItem('catReminderDismissed')
-    console.log('[CatReminder] Session dismissed state:', dismissed)
-    if (dismissed === 'true') {
-      dismissedThisSession.value = true
-      console.log('[CatReminder] Reminder was dismissed, not showing global reminder')
-    }
-  } catch (e) {
-    console.warn('SessionStorage not available:', e)
-  }
-}
-
-// 清除忽略状态（用于调试，可在控制台调用）
-window.clearCatReminderDismiss = function() {
-  try {
-    sessionStorage.removeItem('catReminderDismissed')
-    dismissedThisSession.value = false
-    console.log('[CatReminder] Dismiss state cleared, global reminder will show')
-  } catch (e) {
-    console.warn('Failed to clear dismiss state:', e)
-  }
+  showGlobalReminder.value = false
 }
 
 // 关闭模态框
@@ -821,7 +786,6 @@ function closeDateModal() {
 
 // 组件挂载时加载数据
 onMounted(() => {
-  loadSessionState()  // 先加载会话状态
   loadData()
 })
 </script>
