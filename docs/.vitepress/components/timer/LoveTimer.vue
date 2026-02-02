@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
 // 指定起始时间（请修改为你的起始时间）
-const startTime = new Date('2025-02-03T20:00:00').getTime();
+const startTime = new Date('2025-02-2T11:09:00').getTime();
 
 const timeElapsed = ref('');
 
