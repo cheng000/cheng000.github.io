@@ -91,7 +91,7 @@ export default withMagicMove(defineConfig({
       { text: 'Projects', link: '/04_Projects/01_Learn-Project/01_项目基础' },
       { text: 'DevSummary', link: '/05_DevSummary/01_Work/001_人机密码分离' },
       { text: 'Cabin&Backpack', link: '/06_Cabin&Backpack/01_Books/001_明朝那些事儿 与 当年明月（石悦）' },
-      { text: 'OurStory', link: '/07_OurStory/01_OurLoveMomentByMoment/001_Dairy' },
+      { text: 'Life', link: '/07_Life/01_OurLoveMomentByMoment/001_Dairy' },
     ],
 
 
@@ -110,7 +110,7 @@ export default withMagicMove(defineConfig({
     },
 
     footer: {
-      message: 'lucky you',
+      message: 'define it',
       copyright: 'Copyright © 2024-present'
     },
 
